@@ -6,6 +6,8 @@ package sokoban.game.renderer.swing;
 
 import sokoban.game.Game;
 
+import java.awt.*;
+
 /**
  * @author Tutas
  */

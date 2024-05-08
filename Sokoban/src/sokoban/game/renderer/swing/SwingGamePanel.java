@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 import static sokoban.game.renderer.swing.SwingRenderer.renderException;
@@ -32,7 +33,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         Timer timer = new Timer(1000 / 30, this);
         timer.start();
         try {
-            var resource = Map.class.getResource("assets/tilemap.png");
+            URL resource = Map.class.getResource("assets/tilemap.png");
             BufferedImage _tilemap = ImageIO.read(Objects.requireNonNull(resource));
             _block_image = _tilemap.getSubimage(0, 0, 16, 16);
             _goal_image = _tilemap.getSubimage(16, 0, 16, 16);
@@ -49,6 +50,10 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
 
     public void setEditing(Boolean b) {
         _is_editing = b;
+        if(_is_editing)
+            setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+        else
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
     
     private final BufferedImage _block_image;

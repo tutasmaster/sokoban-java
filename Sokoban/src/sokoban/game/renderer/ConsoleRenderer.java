@@ -24,15 +24,12 @@ public class ConsoleRenderer implements Renderer {
     public char tileToChar(Map.Tile t) {
 
         switch (t) {
-            case Empty -> {
+            case Empty :
                 return ' ';
-            }
-            case Floor -> {
+            case Floor :
                 return '.';
-            }
-            case Wall -> {
+            case Wall :
                 return '#';
-            }
         }
         return '?';
     }
@@ -44,7 +41,7 @@ public class ConsoleRenderer implements Renderer {
         StringBuilder map_string = new StringBuilder();
         for (int y = 0; y < m.get_size_y(); y++) {
             for (int x = 0; x < m.get_size_x(); x++) {
-                var t = m.getTile(x, y);
+                Map.Tile t = m.getTile(x, y);
                 map_string.append(tileToChar(t));
             }
             map_string.append("\n");
@@ -57,7 +54,7 @@ public class ConsoleRenderer implements Renderer {
     }
 
     public void render() {
-        var m = renderMap(_game.get_map());
+        StringBuilder m = renderMap(_game.get_map());
         for (Entity e : _game.get_entity_list()) {
             Coord2DInt p = e.getPosition();
             if (e.getClass() == Goal.class) {
@@ -86,8 +83,12 @@ public class ConsoleRenderer implements Renderer {
                 render();
                 Game.INPUT_RESULT inputResult = input();
                 switch (inputResult){
-                    case NEXT_LEVEL->System.out.println("Welcome to level " + _game.current_level + "!");
-                    case END->System.out.println("Congratulations, you've reached the end!");
+                    case NEXT_LEVEL:
+                        System.out.println("Welcome to level " + _game.current_level + "!");
+                        break;
+                    case END:
+                        System.out.println("Congratulations, you've reached the end!");
+                        break;
                 }
             }catch(Exception e){
                 _game.set_running(false);

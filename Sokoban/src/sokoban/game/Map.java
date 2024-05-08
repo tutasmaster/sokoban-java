@@ -30,9 +30,15 @@ public class Map implements Serializable {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 switch (s.charAt(i)) {
-                    case ' ' -> m.setTile(x, y, Tile.Empty);
-                    case '#' -> m.setTile(x, y, Tile.Wall);
-                    default -> m.setTile(x, y, Tile.Floor);
+                    case ' ' : 
+                        m.setTile(x, y, Tile.Empty);
+                        break;
+                    case '#':
+                        m.setTile(x, y, Tile.Wall);
+                        break;
+                    default : 
+                        m.setTile(x, y, Tile.Floor);
+                        break;
                 }
                 i++;
             }
@@ -72,10 +78,18 @@ public class Map implements Serializable {
         for (int y = 0; y < _size_y; y++) {
             for (int x = 0; x < _size_x; x++) {
                 switch (getTile(x, y)) {
-                    case Empty -> result.append(" ");
-                    case Floor -> result.append(".");
-                    case Wall -> result.append("#");
-                    default -> result.append("?");
+                    case Empty : 
+                        result.append(" ");
+                        break;
+                    case Floor : 
+                        result.append(".");
+                        break;
+                    case Wall : 
+                        result.append("#");
+                        break;
+                    default : 
+                        result.append("?");
+                        break;
                 }
             }
             result.append("\n");

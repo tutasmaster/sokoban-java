@@ -173,9 +173,15 @@ public class Game {
             char replacement = '.';
             System.out.println(e.getClass().getSimpleName());
             switch (e.getClass().getSimpleName()) {
-                case "Player" -> replacement = '@';
-                case "Box" -> replacement = 'O';
-                case "Goal" -> replacement = 'G';
+                case "Player" :
+                    replacement = '@';
+                    break;
+                case "Box" :
+                    replacement = 'O';
+                    break;
+                case "Goal":
+                    replacement = 'G';
+                    break;
             }
             Coord2DInt pos = e.getPosition();
             result.setCharAt(_map.parsedCoordToIdx(pos.x, pos.y), replacement);
