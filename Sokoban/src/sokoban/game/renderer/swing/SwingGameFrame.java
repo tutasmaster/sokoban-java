@@ -52,6 +52,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
         jRestartItem = new javax.swing.JMenuItem();
         jSaveItem = new javax.swing.JMenuItem();
         jLoadItem = new javax.swing.JMenuItem();
+        jMouseMode = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jSaveLevel = new javax.swing.JMenuItem();
         jLoadLevel = new javax.swing.JMenuItem();
@@ -60,20 +61,34 @@ public class SwingGameFrame extends javax.swing.JFrame {
         jAboutItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(27, 27, 40));
+        setForeground(java.awt.Color.red);
+
+        jGamePanel.setBackground(new java.awt.Color(51, 51, 51));
+        jGamePanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout jGamePanelLayout = new javax.swing.GroupLayout(jGamePanel);
         jGamePanel.setLayout(jGamePanelLayout);
         jGamePanelLayout.setHorizontalGroup(
-                jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 388, Short.MAX_VALUE)
+            jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         jGamePanelLayout.setVerticalGroup(
-                jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 265, Short.MAX_VALUE)
+            jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 567, Short.MAX_VALUE)
         );
 
+        jMenuBar2.setBackground(new java.awt.Color(51, 51, 51));
+        jMenuBar2.setForeground(new java.awt.Color(255, 255, 255));
+
+        jMenu3.setBackground(new java.awt.Color(51, 51, 51));
+        jMenu3.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sokoban/game/assets/game.png"))); // NOI18N
         jMenu3.setText("Game");
 
+        jRestartItem.setBackground(new java.awt.Color(51, 51, 51));
+        jRestartItem.setForeground(new java.awt.Color(255, 255, 255));
         jRestartItem.setText("Restart");
         jRestartItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +97,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu3.add(jRestartItem);
 
+        jSaveItem.setBackground(new java.awt.Color(51, 51, 51));
+        jSaveItem.setForeground(new java.awt.Color(255, 255, 255));
         jSaveItem.setText("Save");
         jSaveItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +107,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu3.add(jSaveItem);
 
+        jLoadItem.setBackground(new java.awt.Color(51, 51, 51));
+        jLoadItem.setForeground(new java.awt.Color(255, 255, 255));
         jLoadItem.setText("Load");
         jLoadItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -98,10 +117,25 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu3.add(jLoadItem);
 
+        jMouseMode.setBackground(new java.awt.Color(51, 51, 51));
+        jMouseMode.setForeground(new java.awt.Color(255, 255, 255));
+        jMouseMode.setText("Mouse Mode");
+        jMouseMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMouseModeActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMouseMode);
+
         jMenuBar2.add(jMenu3);
 
+        jMenu1.setBackground(new java.awt.Color(51, 51, 51));
+        jMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sokoban/game/assets/level.png"))); // NOI18N
         jMenu1.setText("Level");
 
+        jSaveLevel.setBackground(new java.awt.Color(51, 51, 51));
+        jSaveLevel.setForeground(new java.awt.Color(255, 255, 255));
         jSaveLevel.setText("Save...");
         jSaveLevel.setActionCommand("SaveLevel");
         jSaveLevel.addActionListener(new java.awt.event.ActionListener() {
@@ -111,6 +145,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu1.add(jSaveLevel);
 
+        jLoadLevel.setBackground(new java.awt.Color(51, 51, 51));
+        jLoadLevel.setForeground(new java.awt.Color(255, 255, 255));
         jLoadLevel.setText("Load...");
         jLoadLevel.setActionCommand("LoadLevel");
         jLoadLevel.addActionListener(new java.awt.event.ActionListener() {
@@ -120,6 +156,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu1.add(jLoadLevel);
 
+        jEditLevel.setBackground(new java.awt.Color(51, 51, 51));
+        jEditLevel.setForeground(new java.awt.Color(255, 255, 255));
         jEditLevel.setText("Edit");
         jEditLevel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,8 +168,12 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
         jMenuBar2.add(jMenu1);
 
+        jMenu4.setBackground(new java.awt.Color(51, 51, 51));
+        jMenu4.setForeground(new java.awt.Color(255, 255, 255));
         jMenu4.setText("Help");
 
+        jAboutItem.setBackground(new java.awt.Color(51, 51, 51));
+        jAboutItem.setForeground(new java.awt.Color(255, 255, 255));
         jAboutItem.setText("About");
         jAboutItem.setActionCommand("jAboutItem");
         jAboutItem.addActionListener(new java.awt.event.ActionListener() {
@@ -148,21 +190,16 @@ public class SwingGameFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jGamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jGamePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jGamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jGamePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jAboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAboutItemActionPerformed
@@ -276,6 +313,19 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jSaveLevelActionPerformed
 
+    SwingControlFrame controlFrame;
+    private void jMouseModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMouseModeActionPerformed
+        // TODO add your handling code here:
+        if(controlFrame == null || !controlFrame.isVisible()){
+            controlFrame = new SwingControlFrame(_game);
+            controlFrame.setAlwaysOnTop(true);
+            controlFrame.setVisible(true);
+        }else{
+            controlFrame.dispose();
+            controlFrame = null;
+        }
+    }//GEN-LAST:event_jMouseModeActionPerformed
+
     public void closeEditBox() {
         editFrame = null;
         _game.setCursorPos(null);
@@ -306,6 +356,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMouseMode;
     private javax.swing.JMenuItem jRestartItem;
     private javax.swing.JMenuItem jSaveItem;
     private javax.swing.JMenuItem jSaveLevel;

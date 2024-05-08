@@ -9,11 +9,13 @@ import sokoban.game.entity.Goal;
 import sokoban.game.entity.Player;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
 
@@ -40,8 +42,10 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             _floor_image = _tilemap.getSubimage(32, 0, 16, 16);
             _wall_image = _tilemap.getSubimage(48, 0, 16, 16);
             _player_image = _tilemap.getSubimage(64, 0, 16, 16);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            _push_audio = loadSound("assets/push2.wav");
+            _goal_audio = loadSound("assets/goal.wav");
+        } catch (Exception e) {
+            SwingRenderer.renderException(this,e);
         }
     }
 
@@ -56,11 +60,13 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
     
-    private final BufferedImage _block_image;
-    private final BufferedImage _goal_image;
-    private final BufferedImage _floor_image;
-    private final BufferedImage _wall_image;
-    private final BufferedImage _player_image;
+    private BufferedImage _block_image;
+    private BufferedImage _goal_image;
+    private BufferedImage _floor_image;
+    private BufferedImage _wall_image;
+    private BufferedImage _player_image;
+    private Clip _push_audio;
+    private Clip _goal_audio;
     private float scale_x = 25;
     private float scale_y = 25;
     private int offset_x = 0;
@@ -162,6 +168,16 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             g.drawRect((int) (cursor.x * scale_x) + offset_x, (int) (cursor.y * scale_x) + offset_y, sX + 1, sY + 1);
         }
     }
+    
+    public static Clip loadSound(String resourceName)
+            throws IOException, UnsupportedAudioFileException,
+            LineUnavailableException {
+        InputStream in = Map.class.getResourceAsStream(resourceName);
+        AudioInputStream ain = AudioSystem.getAudioInputStream(in);
+        Clip clip = AudioSystem.getClip();
+        clip.open(ain);
+        return clip;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -179,20 +195,37 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             s = "down";
         } else if (e.getKeyChar() == 'd' || e.getKeyCode() == KeyEvent.VK_RIGHT) {
             s = "right";
+        } else if (e.getKeyChar() == 'q'){
+            s = "undo";
+        } else if (e.getKeyChar() == 'e'){
+            s = "redo";
         }
 
         try {
             Game.INPUT_RESULT r = _game.input(s);
+            handleInputResult(r);
             repaint();
-            if (r == Game.INPUT_RESULT.NEXT_LEVEL) {
-                renderMessage(this, "You beat level " + _game.current_level + "!", "Congratulations");
-                repaint();
-            }
         } catch (Exception ex) {
             renderException(this, ex);
         }
     }
-
+    
+    private void handleInputResult(Game.INPUT_RESULT r) {
+        if (r == Game.INPUT_RESULT.NEXT_LEVEL) {
+            _goal_audio.setMicrosecondPosition(0);
+            _goal_audio.start();
+            renderMessage(this, "You beat level " + _game.current_level + "!", "Congratulations");
+        }else if(r == Game.INPUT_RESULT.END) {
+            _goal_audio.start();
+            renderMessage(this, "You won the game!", "Congratulations");
+        }else if(r == Game.INPUT_RESULT.PUSHED){
+            _push_audio.stop();
+            _push_audio.setMicrosecondPosition(0);
+            _push_audio.start();
+        }
+        repaint();
+    }
+    
     @Override
     public void keyReleased(KeyEvent e) {
 
@@ -213,7 +246,12 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
 
         Coord2DInt cursor_pos = new Coord2DInt((int) sX, (int) sY);
         if (!_is_editing) {
-            _game.walkTo(cursor_pos);
+            try{
+                Game.INPUT_RESULT r = _game.walkTo(cursor_pos);
+                handleInputResult(r);
+            }catch(Exception ex){
+                SwingRenderer.renderException(this,ex);
+            }
             return;
         }
 
@@ -273,8 +311,9 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            _game.input("");
+            Game.INPUT_RESULT r = _game.input("");
             repaint();
+            handleInputResult(r);
         } catch (Exception ex) {
             renderException(this, ex);
         }

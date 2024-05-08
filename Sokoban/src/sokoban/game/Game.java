@@ -6,12 +6,16 @@ import sokoban.game.pathfinding.Graph;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import static sokoban.game.Map.GenerateBoxMap;
 
 public class Game {
     public final String SAVE_TYPE = ".sok";
-    public final String[] levels = {"level01.sokl", "level02.sokl"};
+    public final String[] levels = {"level01.sokl", "level02.sokl", "wacky.sokl", "suspect.sokl"};
+    
+    public Stack<byte[]> states = new Stack<byte[]>();
+    public Stack<byte[]> redo_states = new Stack<byte[]>();
     public int current_level = 0;
     private boolean _running;
 
@@ -55,6 +59,8 @@ public class Game {
     public enum INPUT_RESULT {
         NONE,
         NEXT_LEVEL,
+        PUSHED,
+        MOVED,
         END
     }
 
@@ -62,12 +68,15 @@ public class Game {
         for (Entity e : _entity_list) {
             e.iterate();
         }
+        
         if (goalsLeft() == 0) {
             if(loadNextLevel()){
                 return INPUT_RESULT.NEXT_LEVEL;
             }else{
                 return INPUT_RESULT.END;
             }
+        }else if(hasPushed){
+            return INPUT_RESULT.PUSHED;
         }
         return INPUT_RESULT.NONE;
     }
@@ -76,7 +85,7 @@ public class Game {
         if (x > -1 && x < _map.get_size_x() && y > -1 && y < _map.get_size_y()) {
             if (_map.getTile(x, y) == Map.Tile.Floor) {
                 for (Entity e : _entity_list) {
-                    if (e.getPosition().x == x && e.getPosition().y == y && !e.is_walkable()) {
+                    if (e.getPosition().x == x && e.getPosition().y == y && !e.isWalkable()) {
                         return false;
                     }
                 }
@@ -87,23 +96,44 @@ public class Game {
     }
 
     public INPUT_RESULT input(String input) throws Exception {
+        hasPushed = false;
         String i = input.toLowerCase();
         switch (i) {
             case "l":
             case "left":
-                get_player().Move(-1, 0);
+                redo_states = new Stack<byte[]>();
+                saveState();
+                get_player().move(-1, 0);
+                if(hasPushed){
+                    return INPUT_RESULT.PUSHED;
+                }
                 break;
             case "r":
             case "right":
-                get_player().Move(1, 0);
+                redo_states = new Stack<byte[]>();
+                saveState();
+                get_player().move(1, 0);
+                if(hasPushed){
+                    return INPUT_RESULT.PUSHED;
+                }
                 break;
             case "u":
             case "up":
-                get_player().Move(0, -1);
+                redo_states = new Stack<byte[]>();
+                saveState();
+                get_player().move(0, -1);
+                if(hasPushed){
+                    return INPUT_RESULT.PUSHED;
+                }
                 break;
             case "d":
             case "down":
-                get_player().Move(0, 1);
+                redo_states = new Stack<byte[]>();
+                saveState();
+                get_player().move(0, 1);
+                if(hasPushed){
+                    return INPUT_RESULT.PUSHED;
+                }
                 break;
             case "save":
                 save();
@@ -113,6 +143,12 @@ public class Game {
                 break;
             case "place":
                 place();
+                break;
+            case "undo":
+                loadState();
+                break;
+            case "redo":
+                loadRedoState();
                 break;
             case "":
                 return iterate();
@@ -159,11 +195,42 @@ public class Game {
 
     private void save() throws Exception {
         FileOutputStream file = new FileOutputStream(save_file);
-        ObjectOutputStream stream = new ObjectOutputStream(file);
+        save(file);
+        file.close();
+    }
+    private void saveState() throws Exception {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        save(outputStream);
+        states.push(outputStream.toByteArray());
+        outputStream.close();
+    }
+    private void loadState() throws Exception {
+        if(states.size() == 0){
+            return;
+        }
+        byte[] state = states.pop();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(state);
+        load(inputStream);
+        inputStream.close();
+        redo_states.push(state);
+    }
+    
+    private void loadRedoState() throws Exception {
+        if(redo_states.size() == 0){
+            return;
+        }
+        byte[] state = redo_states.pop();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(state);
+        load(inputStream);
+        inputStream.close();
+        states.push(state);
+    }
+    private void save(OutputStream output) throws Exception {
+        ObjectOutputStream stream = new ObjectOutputStream(output);
+        
         stream.writeObject(_map);
         stream.writeObject(_entity_list);
         stream.close();
-        file.close();
     }
 
     public void saveLevel(String file_name) throws Exception {
@@ -230,16 +297,19 @@ public class Game {
 
         stream.close();
     }
-
-    private void load() throws Exception {
-        FileInputStream file = new FileInputStream(save_file);
-        ObjectInputStream stream = new ObjectInputStream(file);
+    private void load(InputStream input) throws Exception {
+        ObjectInputStream stream = new ObjectInputStream(input);
         _map = (Map) stream.readObject();
         _entity_list = (List<Entity>) stream.readObject();
-        for (Entity e : _entity_list) {
+        for (Entity e : _entity_list){
             e.setGame(this);
         }
         stream.close();
+    }
+
+    private void load() throws Exception {
+        FileInputStream file = new FileInputStream(save_file);
+        load(file);
         file.close();
     }
 
@@ -263,19 +333,22 @@ public class Game {
     private void loadLocalLevel(String level) throws Exception {
         loadLevel(getLocalLevel("levels/" + level));
     }
-
+    
+    boolean hasPushed = false;
     public void pushEntity(int x, int y, int x1, int y1) {
         for (Entity e : _entity_list) {
-            if (e.getPosition().x == x && e.getPosition().y == y && e.is_pushable()) {
-                e.Move(x1, y1);
+            if (e.getPosition().x == x && e.getPosition().y == y && e.isPushable()) {
+                e.move(x1, y1);
+                hasPushed = true;
             }
         }
     }
 
     public boolean loadNextLevel() throws Exception {
-        current_level++;
-        if(current_level >= levels.length)
+        if(current_level >= levels.length-1)
             return false;
+        
+        current_level++;
         loadLocalLevel(levels[current_level]);
         return true;
     }
@@ -330,13 +403,20 @@ public class Game {
         return cursor;
     }
 
-    public void walkTo(Coord2DInt cursorPos) {
+    public INPUT_RESULT walkTo(Coord2DInt cursorPos) throws Exception {
+        hasPushed = false;
         if(cursorPos.getDistanceTo(get_player().getPosition()) < 1.05){
-            get_player().Move(cursorPos.x - get_player().getPosition().x, cursorPos.y - get_player().getPosition().y);
+            saveState();
+            get_player().move(cursorPos.x - get_player().getPosition().x, cursorPos.y - get_player().getPosition().y);
+            if(hasPushed)
+                return INPUT_RESULT.PUSHED;
+            else
+                return INPUT_RESULT.NONE;
         }
         Graph g = new Graph(this);
         ArrayList<Coord2DInt> path = g.getPath(get_player().getPosition(), cursorPos);
         get_player().setPath(path);
+        return INPUT_RESULT.NONE;
     }
 
 
