@@ -50,6 +50,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jRestartItem = new javax.swing.JMenuItem();
+        jUndoItem = new javax.swing.JMenuItem();
+        jLoadItem2 = new javax.swing.JMenuItem();
         jSaveItem = new javax.swing.JMenuItem();
         jLoadItem = new javax.swing.JMenuItem();
         jMouseMode = new javax.swing.JMenuItem();
@@ -87,6 +89,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sokoban/game/assets/game.png"))); // NOI18N
         jMenu3.setText("Game");
 
+        jRestartItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, 0));
         jRestartItem.setBackground(new java.awt.Color(51, 51, 51));
         jRestartItem.setForeground(new java.awt.Color(255, 255, 255));
         jRestartItem.setText("Restart");
@@ -97,6 +100,29 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu3.add(jRestartItem);
 
+        jUndoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, 0));
+        jUndoItem.setBackground(new java.awt.Color(51, 51, 51));
+        jUndoItem.setForeground(new java.awt.Color(255, 255, 255));
+        jUndoItem.setText("Undo");
+        jUndoItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUndoItemActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jUndoItem);
+
+        jLoadItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, 0));
+        jLoadItem2.setBackground(new java.awt.Color(51, 51, 51));
+        jLoadItem2.setForeground(new java.awt.Color(255, 255, 255));
+        jLoadItem2.setText("Redo");
+        jLoadItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLoadItem2ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jLoadItem2);
+
+        jSaveItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         jSaveItem.setBackground(new java.awt.Color(51, 51, 51));
         jSaveItem.setForeground(new java.awt.Color(255, 255, 255));
         jSaveItem.setText("Save");
@@ -107,6 +133,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu3.add(jSaveItem);
 
+        jLoadItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         jLoadItem.setBackground(new java.awt.Color(51, 51, 51));
         jLoadItem.setForeground(new java.awt.Color(255, 255, 255));
         jLoadItem.setText("Load");
@@ -117,6 +144,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
         });
         jMenu3.add(jLoadItem);
 
+        jMouseMode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, 0));
         jMouseMode.setBackground(new java.awt.Color(51, 51, 51));
         jMouseMode.setForeground(new java.awt.Color(255, 255, 255));
         jMouseMode.setText("Mouse Mode");
@@ -326,6 +354,14 @@ public class SwingGameFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMouseModeActionPerformed
 
+    private void jUndoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUndoItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jUndoItemActionPerformed
+
+    private void jLoadItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLoadItem2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLoadItem2ActionPerformed
+
     public void closeEditBox() {
         editFrame = null;
         _game.setCursorPos(null);
@@ -344,6 +380,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem jEditLevel;
     private javax.swing.JPanel jGamePanel;
     private javax.swing.JMenuItem jLoadItem;
+    private javax.swing.JMenuItem jLoadItem2;
     private javax.swing.JMenuItem jLoadLevel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
@@ -353,5 +390,6 @@ public class SwingGameFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jRestartItem;
     private javax.swing.JMenuItem jSaveItem;
     private javax.swing.JMenuItem jSaveLevel;
+    private javax.swing.JMenuItem jUndoItem;
     // End of variables declaration//GEN-END:variables
 }
