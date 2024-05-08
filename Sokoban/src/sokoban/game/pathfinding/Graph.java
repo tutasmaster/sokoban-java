@@ -1,54 +1,46 @@
 package sokoban.game.pathfinding;
 
-import sokoban.game.Coord2DInt;
+import sokoban.game.Vector2;
 import sokoban.game.Game;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 
 public class Graph {
-    Game _game;
-    Coord2DInt current_target;
+    private final Game _game;
+    private Vector2 _current_target;
 
-    public Graph(Game g) {
-        _game = g;
+    public Graph(Game game) {
+        _game = game;
     }
 
-    Node generateNode(Coord2DInt pos) {
-        Node n = new Node(pos, pos.getDistanceTo(current_target));
-        return n;
+    Node generateNode(Vector2 position) {
+        return new Node(position, position.getDistanceTo(_current_target));
     }
 
-    ArrayList<Node> findNeighbours(Node n) {
-        ArrayList<Node> neighbours = new ArrayList<Node>();
-        Node left = generateNode(new Coord2DInt(n.pos.x - 1, n.pos.y));
-        Node right = generateNode(new Coord2DInt(n.pos.x + 1, n.pos.y));
-        Node down = generateNode(new Coord2DInt(n.pos.x, n.pos.y + 1));
-        Node up = generateNode(new Coord2DInt(n.pos.x, n.pos.y - 1));
-        if (_game.isTileWalkable(left.pos.x, left.pos.y)) {
-            left.parent = n;
-            neighbours.add(left);
-        }
-        if (_game.isTileWalkable(right.pos.x, right.pos.y)) {
-            right.parent = n;
-            neighbours.add(right);
-        }
-        if (_game.isTileWalkable(down.pos.x, down.pos.y)) {
-            down.parent = n;
-            neighbours.add(down);
-        }
-        if (_game.isTileWalkable(up.pos.x, up.pos.y)) {
-            up.parent = n;
-            neighbours.add(up);
-        }
+    ArrayList<Node> findNeighbours(Node node) {
+        ArrayList<Node> neighbours = new ArrayList<>();
+        Node left = generateNode(new Vector2(node.pos.x - 1, node.pos.y));
+        Node right = generateNode(new Vector2(node.pos.x + 1, node.pos.y));
+        Node down = generateNode(new Vector2(node.pos.x, node.pos.y + 1));
+        Node up = generateNode(new Vector2(node.pos.x, node.pos.y - 1));
+        validateNode(node, left, neighbours);
+        validateNode(node, right, neighbours);
+        validateNode(node, up, neighbours);
+        validateNode(node, down, neighbours);
         return neighbours;
     }
-
-    private ArrayList<Coord2DInt> followNodePath(Node n) {
-        ArrayList<Coord2DInt> path = new ArrayList<>();
-        Node current = n;
+    
+    private void validateNode(Node current, Node next, ArrayList<Node> neighbours) {
+        if (_game.isTileWalkable(next.pos.x, next.pos.y)) {
+            next.parent = current;
+            neighbours.add(next);
+        }
+    }
+    
+    private ArrayList<Vector2> followNodePath(Node node) {
+        ArrayList<Vector2> path = new ArrayList<>();
+        Node current = node;
         while (current.parent != null) {
             path.add(current.pos);
             current = current.parent;
@@ -56,8 +48,8 @@ public class Graph {
         return path;
     }
 
-    public ArrayList<Coord2DInt> getPath(Coord2DInt start, Coord2DInt end) {
-        current_target = end;
+    public ArrayList<Vector2> getPath(Vector2 start, Vector2 end) {
+        _current_target = end;
         PriorityQueue<Node> visited = new PriorityQueue<>(new NodeComparator());
         PriorityQueue<Node> to_visit = new PriorityQueue<>(new NodeComparator());
         boolean foundPath = false;
@@ -71,14 +63,14 @@ public class Graph {
             visited.add(current_node);
             to_visit.remove(current_node);
             ArrayList<Node> neighbours = findNeighbours(current_node);
-            for (Node n : neighbours) {
-                if (n.pos.x == end.x && n.pos.y == end.y) {
-                    return followNodePath(n);
+            for (Node neighbour : neighbours) {
+                if (neighbour.pos.x == end.x && neighbour.pos.y == end.y) {
+                    return followNodePath(neighbour);
                 }
 
-                if (!to_visit.contains(n) && !visited.contains(n)) {
-                    n.parent = current_node;
-                    to_visit.add(n);
+                if (!to_visit.contains(neighbour) && !visited.contains(neighbour)) {
+                    neighbour.parent = current_node;
+                    to_visit.add(neighbour);
                 }
             }
         }

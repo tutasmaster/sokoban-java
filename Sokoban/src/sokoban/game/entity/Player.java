@@ -1,6 +1,6 @@
 package sokoban.game.entity;
 
-import sokoban.game.Coord2DInt;
+import sokoban.game.Vector2;
 import sokoban.game.Game;
 
 import java.util.ArrayList;
@@ -12,14 +12,14 @@ public class Player extends Entity {
     * such as what happens when playing with a mouse.
     * The path should not be serialized and stored in the save file.
      */
-    transient public ArrayList<Coord2DInt> path;
+    transient public ArrayList<Vector2> path;
 
     public Player(Game g) {
         super(g);
 
     }
 
-    public Player(Game g, Coord2DInt pos) {
+    public Player(Game g, Vector2 pos) {
         super(g, pos);
     }
 
@@ -36,13 +36,13 @@ public class Player extends Entity {
     public void iterate() {
         super.iterate();
         if (path != null && !path.isEmpty()) {
-            Coord2DInt next_pos = path.get(path.size() - 1);
+            Vector2 next_pos = path.get(path.size() - 1);
             path.remove(path.size() - 1);
             _position = next_pos;
         }
     }
 
-    public void setPath(ArrayList<Coord2DInt> p) {
+    public void setPath(ArrayList<Vector2> p) {
         path = p;
     }
 }

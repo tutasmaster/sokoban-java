@@ -405,18 +405,18 @@ void" visibility="private"/>
     <HasRelation name="_game" source="sokoban.game.renderer.swing.SwingGamePanel" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
     <HasRelation name="_game" source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation source="sokoban.game.entity.Entity" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation source="sokoban.game.Game" target="sokoban.game.Coord2DInt" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.Game" target="sokoban.game.Vector2" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation source="sokoban.game.renderer.swing.SwingGamePanel" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation source="sokoban.game.Map" target="sokoban.game.Map" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation source="sokoban.game.renderer.swing.SwingRenderer" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation source="sokoban.game.Game" target="sokoban.game.Map" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation source="sokoban.game.renderer.Renderer" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
     <IsRelation name="is" source="sokoban.game.entity.Player" target="sokoban.game.entity.Entity"/>
-    <HasRelation name="cursor" source="sokoban.game.Game" target="sokoban.game.Coord2DInt" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="cursor" source="sokoban.game.Game" target="sokoban.game.Vector2" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
     <HasRelation name="_renderer" source="sokoban.Application" target="sokoban.game.renderer.Renderer" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
     <HasRelation name="g" source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
     <HasRelation name="_game" source="sokoban.game.entity.Entity" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation source="sokoban.game.entity.Entity" target="sokoban.game.Coord2DInt" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <HasRelation name="_position" source="sokoban.game.entity.Entity" target="sokoban.game.Coord2DInt" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.entity.Entity" target="sokoban.game.Vector2" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_position" source="sokoban.game.entity.Entity" target="sokoban.game.Vector2" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
   </ClassDiagramRelations>
 </ClassDiagram>

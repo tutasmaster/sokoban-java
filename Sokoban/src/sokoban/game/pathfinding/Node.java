@@ -1,16 +1,15 @@
 package sokoban.game.pathfinding;
 
-import sokoban.game.Coord2DInt;
+import sokoban.game.Vector2;
 
 import java.util.Objects;
-import java.util.PriorityQueue;
 
 public class Node {
     public double cost;
-    public Coord2DInt pos;
+    public Vector2 pos;
     public Node parent = null;
 
-    public Node(Coord2DInt pos, double v) {
+    public Node(Vector2 pos, double v) {
         this.pos = pos;
         this.cost = v;
     }

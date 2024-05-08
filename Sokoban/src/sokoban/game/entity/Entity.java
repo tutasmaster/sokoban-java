@@ -1,6 +1,6 @@
 package sokoban.game.entity;
 
-import sokoban.game.Coord2DInt;
+import sokoban.game.Vector2;
 import sokoban.game.Game;
 
 import java.io.Serializable;
@@ -11,9 +11,9 @@ public class Entity implements Serializable {
     * These definitions are used for serializing entities in the level files (.sokl)
     * They are otherwise irrelevant during gameplay
     * */
-    public static char GOAL_CHAR = 'G';
-    public static char BOX_CHAR = 'O';
-    public static char PLAYER_CHAR = '@';
+    public final static char GOAL_CHAR = 'G';
+    public final static char BOX_CHAR = 'O';
+    public final static char PLAYER_CHAR = '@';
 
     /*
     * Entities have a position, an option to be walked on or being pushed by external forces
@@ -21,12 +21,12 @@ public class Entity implements Serializable {
     * A Goal can be walked on top of by a Player or Box
     * */
     
-    protected Coord2DInt _position;
+    protected Vector2 _position;
     protected Boolean _pushable = false;
     protected Boolean _walkable = false;
     
     /*
-    Game is transcient because we cannot have references in the Serialized version of the Object
+    Game is transient because we cannot have references in the Serialized version of the Object
     * */
     protected transient Game _game;
     
@@ -61,7 +61,7 @@ public class Entity implements Serializable {
      * @param game used for manipulating the game state from the entity
      * @param position sets the position of the entity in the world
      */
-    public Entity(Game game, Coord2DInt position) {
+    public Entity(Game game, Vector2 position) {
         this._game = game;
         this._position = position;
     }
@@ -72,7 +72,7 @@ public class Entity implements Serializable {
      * @param game used for manipulating the game state from the entity
      */
     public Entity(Game game) {
-        this(game, new Coord2DInt(0, 0));
+        this(game, new Vector2(0, 0));
     }
     
     /**
@@ -92,14 +92,14 @@ public class Entity implements Serializable {
      * @param y
      */
     public void setPosition(int x, int y) {
-        _position = new Coord2DInt(x, y);
+        _position = new Vector2(x, y);
     }
     
     /**
      * Returns where the entity currently is as a Coord2DInt
      * @return the position of the Entity
      */
-    public Coord2DInt getPosition() {
+    public Vector2 getPosition() {
         return _position;
     }
     
@@ -110,7 +110,7 @@ public class Entity implements Serializable {
     public void iterate() { }
     protected boolean moveInternal(int x, int y) {
         if (_game.isTileWalkable(_position.x + x, _position.y + y)) {
-            _position = new Coord2DInt(_position.x + x, _position.y + y);
+            _position = new Vector2(_position.x + x, _position.y + y);
             return true;
         }
         return false;

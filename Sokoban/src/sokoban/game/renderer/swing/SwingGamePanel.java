@@ -1,6 +1,6 @@
 package sokoban.game.renderer.swing;
 
-import sokoban.game.Coord2DInt;
+import sokoban.game.Vector2;
 import sokoban.game.Game;
 import sokoban.game.Map;
 import sokoban.game.entity.Box;
@@ -83,17 +83,17 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         if (_game == null) {
             return;
         }
-        Map map = _game.get_map();
+        Map map = _game.getMap();
         Dimension d = getSize();
-        scale_x = d.width / (float) map.get_size_x();
-        scale_y = d.height / (float) map.get_size_y();
+        scale_x = d.width / (float) map.getWidth();
+        scale_y = d.height / (float) map.getHeight();
 
         float min = Math.min(scale_x, scale_y);
         scale_x = min;
         scale_y = min;
 
-        offset_x = (d.width - (int) (scale_x * map.get_size_x())) / 2;
-        offset_y = (d.height - (int) (scale_y * map.get_size_y())) / 2;
+        offset_x = (d.width - (int) (scale_x * map.getWidth())) / 2;
+        offset_y = (d.height - (int) (scale_y * map.getHeight())) / 2;
 
         int sX = Math.round(scale_x);
         int sY = Math.round(scale_y);
@@ -101,18 +101,18 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         g.setColor(SwingColors.BACKGROUND);
         g.fillRect(0,0,d.width, d.height);
 
-        for (int j = 0; j < map.get_size_y(); j++) {
-            for (int i = 0; i < map.get_size_x(); i++) {
+        for (int j = 0; j < map.getHeight(); j++) {
+            for (int i = 0; i < map.getWidth(); i++) {
                 Map.Tile t = map.getTile(i, j);
 
                 int posX = (int) (i * scale_x) + offset_x;
                 int posY = (int) (j * scale_y) + offset_y;
 
-                if (t == Map.Tile.Wall) {
+                if (t == Map.Tile.WALL) {
                     g.setColor(SwingColors.WALL);
                     g.fillRect(posX, posY, sX + 1, sY + 1);
                     g.drawImage(_wall_image, posX, posY, sX + 1, sY + 1, null);
-                } else if (t == Map.Tile.Floor) {
+                } else if (t == Map.Tile.FLOOR) {
                     g.setColor(SwingColors.FLOOR);
                     g.fillRect(posX, posY, sX + 1, sY + 1);
                     g.drawImage(_floor_image, posX, posY, sX + 1, sY + 1, null);
@@ -121,9 +121,9 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         }
 
 
-        for (Entity e : _game.get_entity_list()) {
+        for (Entity e : _game.getEntityList()) {
             if (e.getClass() == Goal.class) {
-                Coord2DInt p = e.getPosition();
+                Vector2 p = e.getPosition();
                 int gridPosX = (int) (p.x * scale_x) + offset_x;
                 int gridPosY = (int) (p.y * scale_y) + offset_y;
                 g.setColor(SwingColors.GOAL);
@@ -132,9 +132,9 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             }
         }
 
-        for (Entity e : _game.get_entity_list()) {
+        for (Entity e : _game.getEntityList()) {
             if (e.getClass() == Player.class) {
-                Coord2DInt p = _game.get_player().getPosition();
+                Vector2 p = _game.getPlayer().getPosition();
                 int gridPosX = (int) (p.x * scale_x) + offset_x;
                 int gridPosY = (int) (p.y * scale_y) + offset_y;
                 g.setColor(SwingColors.PLAYER);
@@ -147,9 +147,9 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         }
 
         //BOXES get drawn last because they overlay sprites
-        for (Entity e : _game.get_entity_list()) {
+        for (Entity e : _game.getEntityList()) {
             if (e.getClass() == Box.class) {
-                Coord2DInt p = e.getPosition();
+                Vector2 p = e.getPosition();
                 int gridPosX = (int) (p.x * scale_x) + offset_x;
                 int gridPosY = (int) (p.y * scale_y) + offset_y;
                 g.setColor(SwingColors.BOX);
@@ -162,8 +162,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         }
 
 
-        Coord2DInt cursor = _game.getCursorPos();
-        if (_is_editing && cursor != null && cursor.y < map.get_size_y() && cursor.x < map.get_size_x() && cursor.x > -1 && cursor.y > -1) {
+        Vector2 cursor = _game.getCursorPos();
+        if (_is_editing && cursor != null && cursor.y < map.getHeight() && cursor.x < map.getWidth() && cursor.x > -1 && cursor.y > -1) {
             g.setColor(Color.WHITE);
             g.drawRect((int) (cursor.x * scale_x) + offset_x, (int) (cursor.y * scale_x) + offset_y, sX + 1, sY + 1);
         }
@@ -214,7 +214,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         if (r == Game.INPUT_RESULT.NEXT_LEVEL) {
             _goal_audio.setMicrosecondPosition(0);
             _goal_audio.start();
-            renderMessage(this, "You beat level " + _game.current_level + "!", "Congratulations");
+            renderMessage(this, "You beat level " + _game.currentLevel + "!", "Congratulations");
         }else if(r == Game.INPUT_RESULT.END) {
             _goal_audio.start();
             renderMessage(this, "You won the game!", "Congratulations");
@@ -233,10 +233,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        /*float sX = e.getX() / scale_x;
-        float sY = e.getY() / scale_y;
-
-        pos = new Coord2DInt((int)sX, (int)sY);*/
+    
     }
 
     @Override
@@ -244,7 +241,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         float sX = (e.getX() - offset_x) / scale_x;
         float sY = (e.getY() - offset_y) / scale_y;
 
-        Coord2DInt cursor_pos = new Coord2DInt((int) sX, (int) sY);
+        Vector2 cursor_pos = new Vector2((int) sX, (int) sY);
         if (!_is_editing) {
             try{
                 Game.INPUT_RESULT r = _game.walkTo(cursor_pos);
@@ -288,7 +285,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
 
         float sX = (e.getX() - offset_x) / scale_x;
         float sY = (e.getY() - offset_y) / scale_y;
-        Coord2DInt cursor_pos = new Coord2DInt((int) sX, (int) sY);
+        Vector2 cursor_pos = new Vector2((int) sX, (int) sY);
         _game.setCursorPos(cursor_pos);
         try {
             _game.input("place");
@@ -303,7 +300,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         float sX = (e.getX() - offset_x) / scale_x;
         float sY = (e.getY() - offset_y) / scale_y;
 
-        Coord2DInt cursor_pos = new Coord2DInt((int) sX, (int) sY);
+        Vector2 cursor_pos = new Vector2((int) sX, (int) sY);
         _game.setCursorPos(cursor_pos);
         repaint();
     }

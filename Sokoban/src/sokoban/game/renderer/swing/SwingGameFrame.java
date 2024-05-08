@@ -216,7 +216,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.input("load");
             jGamePanel.repaint();
         } catch (Exception e) {
-
+            SwingRenderer.renderException(this, e);
         }
     }
 
@@ -230,7 +230,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.input("save");
             jGamePanel.repaint();
         } catch (Exception e) {
-
+            SwingRenderer.renderException(this, e);
         }
     }
 
@@ -240,7 +240,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.input("save");
             jGamePanel.repaint();
         } catch (Exception e) {
-
+            SwingRenderer.renderException(this, e);
         }
     }
 
@@ -337,13 +337,6 @@ public class SwingGameFrame extends javax.swing.JFrame {
     private void restart() {
         _game.start();
         jGamePanel.repaint();
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
