@@ -19,19 +19,20 @@ public class Entity implements Serializable {
     }
 
     public Entity(Game g) {
-        this(g, new Coord2DInt(0,0));
+        this(g, new Coord2DInt(0, 0));
     }
 
     //Relative movement function
-    protected boolean move(int x, int y){
-        if(_game.isTileWalkable(_position.x + x,_position.y + y)){
+    protected boolean move(int x, int y) {
+        if (_game.isTileWalkable(_position.x + x, _position.y + y)) {
             _position = new Coord2DInt(_position.x + x, _position.y + y);
             return true;
         }
         return false;
     }
-    public void Move(int x, int y){
-        move(x,y);
+
+    public void Move(int x, int y) {
+        move(x, y);
     }
 
     public Boolean is_walkable() {
@@ -47,13 +48,15 @@ public class Entity implements Serializable {
 
     protected transient Game _game;
 
-    public void setGame(Game game){
+    public void setGame(Game game) {
         _game = game;
     }
-    public void setPosition(int x, int y){
-        _position = new Coord2DInt(x,y);
+
+    public void setPosition(int x, int y) {
+        _position = new Coord2DInt(x, y);
     }
-    public Coord2DInt getPosition(){
+
+    public Coord2DInt getPosition() {
         return _position;
     }
 

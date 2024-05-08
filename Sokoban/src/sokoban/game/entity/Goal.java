@@ -5,13 +5,14 @@ import sokoban.game.Game;
 
 import javax.swing.text.Position;
 
-public class Goal extends Entity{
+public class Goal extends Entity {
     public Goal(Game g, Coord2DInt p) {
-        super(g,p);
+        super(g, p);
         _pushable = false;
         _walkable = true;
     }
+
     public Goal(Game g) {
-        this(g,new Coord2DInt(0,0));
+        this(g, new Coord2DInt(0, 0));
     }
 }

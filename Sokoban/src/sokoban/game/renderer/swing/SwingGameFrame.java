@@ -7,22 +7,14 @@ package sokoban.game.renderer.swing;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import sokoban.game.Coord2DInt;
 import sokoban.game.Game;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
-/**
- *
- * @author Tutas
- */
 public class SwingGameFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form SwingGameFrame
-     */
     public SwingGameFrame(Game game) {
         setGame(game);
         initComponents();
@@ -32,13 +24,15 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     protected Game _game;
 
-    public void setGame(Game game){
+    public void setGame(Game game) {
         _game = game;
     }
-    public Game getGame(){
+
+    public Game getGame() {
         return _game;
     }
-    public SwingGamePanel getGamePanel(){
+
+    public SwingGamePanel getGamePanel() {
         return (SwingGamePanel) jGamePanel;
     }
 
@@ -70,12 +64,12 @@ public class SwingGameFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout jGamePanelLayout = new javax.swing.GroupLayout(jGamePanel);
         jGamePanel.setLayout(jGamePanelLayout);
         jGamePanelLayout.setHorizontalGroup(
-            jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
+                jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 388, Short.MAX_VALUE)
         );
         jGamePanelLayout.setVerticalGroup(
-            jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 265, Short.MAX_VALUE)
+                jGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 265, Short.MAX_VALUE)
         );
 
         jMenu3.setText("Game");
@@ -154,18 +148,18 @@ public class SwingGameFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jGamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jGamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jGamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jGamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
         );
 
         pack();
@@ -181,10 +175,10 @@ public class SwingGameFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLoadItemActionPerformed
 
     private void load() {
-        try{
+        try {
             _game.input("load");
             jGamePanel.repaint();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -195,38 +189,38 @@ public class SwingGameFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jSaveItemActionPerformed
 
     private void save() {
-        try{
+        try {
             _game.input("save");
             jGamePanel.repaint();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
 
     private void save(String file) {
-        try{
+        try {
             _game.save_file = file;
             _game.input("save");
             jGamePanel.repaint();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
 
     private void saveLevel(String file) {
-        try{
+        try {
             _game.saveLevel(file);
             jGamePanel.repaint();
-        }catch(Exception e){
+        } catch (Exception e) {
             SwingRenderer.renderException(this, e);
         }
     }
 
     private void loadLevel(String file) {
-        try{
+        try {
             _game.loadExternalLevel(file);
             jGamePanel.repaint();
-        }catch(Exception e){
+        } catch (Exception e) {
             SwingRenderer.renderException(this, e);
         }
     }
@@ -237,8 +231,9 @@ public class SwingGameFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jRestartItemActionPerformed
 
     SwingEditFrame editFrame = null;
+
     private void jEditLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditLevelActionPerformed
-        if(editFrame == null){
+        if (editFrame == null) {
             editFrame = new SwingEditFrame(this);
             editFrame.setAlwaysOnTop(true);
             jEditLevel.setSelected(true);
@@ -251,7 +246,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
                     closeEditBox();
                 }
             });
-        }else{
+        } else {
             editFrame.dispose();
             closeEditBox();
         }
@@ -264,7 +259,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Sokoban Level Data", "sokl"));
         fileChooser.setSelectedFile(new File("level.sokl"));
         int response = fileChooser.showOpenDialog(this);
-        if(response == JFileChooser.APPROVE_OPTION){
+        if (response == JFileChooser.APPROVE_OPTION) {
             loadLevel(fileChooser.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_jLoadLevelActionPerformed
@@ -275,13 +270,13 @@ public class SwingGameFrame extends javax.swing.JFrame {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Sokoban Level Data", "sokl"));
         fileChooser.setSelectedFile(new File("level.sokl"));
         int response = fileChooser.showSaveDialog(this);
-        if(response == JFileChooser.APPROVE_OPTION){
+        if (response == JFileChooser.APPROVE_OPTION) {
             saveLevel(fileChooser.getSelectedFile().getAbsolutePath());
         }
 
     }//GEN-LAST:event_jSaveLevelActionPerformed
 
-    public void closeEditBox(){
+    public void closeEditBox() {
         editFrame = null;
         _game.setCursorPos(null);
         getGamePanel().setEditing(false);

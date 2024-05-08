@@ -9,6 +9,7 @@ public class Node {
     public double cost;
     public Coord2DInt pos;
     public Node parent = null;
+
     public Node(Coord2DInt pos, double v) {
         this.pos = pos;
         this.cost = v;

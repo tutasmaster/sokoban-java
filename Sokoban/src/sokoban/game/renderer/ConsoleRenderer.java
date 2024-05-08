@@ -8,19 +8,22 @@ import sokoban.game.entity.Goal;
 
 import java.io.PrintStream;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class ConsoleRenderer implements Renderer {
 
     static PrintStream stream = System.out;
-
-    public ConsoleRenderer() {
+    private final Game _game;
+    
+    public ConsoleRenderer(Game game) {
+        _game = game;
         _scanner = new Scanner(System.in);
     }
 
-    public char tileToChar(Map.Tile t){
+    
+    
+    public char tileToChar(Map.Tile t) {
 
-        switch (t){
+        switch (t) {
             case Empty -> {
                 return ' ';
             }
@@ -39,9 +42,9 @@ public class ConsoleRenderer implements Renderer {
         //This will have a big performance advantage, although in practice
         //in a project of this size, it's a bit redundant
         StringBuilder map_string = new StringBuilder();
-        for (int y = 0; y < m.get_size_y(); y++){
-            for (int x = 0; x < m.get_size_x(); x++){
-                var t = m.getTile(x,y);
+        for (int y = 0; y < m.get_size_y(); y++) {
+            for (int x = 0; x < m.get_size_x(); x++) {
+                var t = m.getTile(x, y);
                 map_string.append(tileToChar(t));
             }
             map_string.append("\n");
@@ -49,32 +52,47 @@ public class ConsoleRenderer implements Renderer {
         return map_string;
     }
 
-    public static StringBuilder drawCharAt(Game g, StringBuilder s, char c, int x, int y){
-        s.setCharAt(x + (y * (g.get_map().get_size_x() + 1)),c);
-        return s;
+    public static void drawCharAt(Game g, StringBuilder s, char c, int x, int y) {
+        s.setCharAt(x + (y * (g.get_map().get_size_x() + 1)), c);
     }
 
-    @Override
-    public void render(Game game) {
-        var m = renderMap(game.get_map());
-        for (Entity e : game.get_entity_list()){
+    public void render() {
+        var m = renderMap(_game.get_map());
+        for (Entity e : _game.get_entity_list()) {
             Coord2DInt p = e.getPosition();
-            if(e.getClass() == Goal.class){
-                drawCharAt(game,m,'*',p.x,p.y);
+            if (e.getClass() == Goal.class) {
+                drawCharAt(_game, m, '*', p.x, p.y);
                 continue;
             }
-            drawCharAt(game,m,'■',p.x,p.y);
+            drawCharAt(_game, m, '■', p.x, p.y);
         }
-        Coord2DInt pos = game.get_player().getPosition();
-        drawCharAt(game,m,'@',pos.x,pos.y);
+        Coord2DInt pos = _game.get_player().getPosition();
+        drawCharAt(_game, m, '@', pos.x, pos.y);
         stream.println(m);
     }
 
     Scanner _scanner;
 
-    @Override
-    public void input(Game game) throws Exception {
+    public Game.INPUT_RESULT input() throws Exception {
         String input = _scanner.nextLine();
-        game.input(input);
+        return _game.input(input);
+    }
+    
+    @Override
+    public void start() {
+        while(_game.is_running()){
+            try{
+                _game.iterate();
+                render();
+                Game.INPUT_RESULT inputResult = input();
+                switch (inputResult){
+                    case NEXT_LEVEL->System.out.println("Welcome to level " + _game.current_level + "!");
+                    case END->System.out.println("Congratulations, you've reached the end!");
+                }
+            }catch(Exception e){
+                _game.set_running(false);
+                e.printStackTrace();
+            }
+        }
     }
 }

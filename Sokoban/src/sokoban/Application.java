@@ -3,7 +3,6 @@ package sokoban;
 import sokoban.game.Game;
 import sokoban.game.renderer.ConsoleRenderer;
 import sokoban.game.renderer.Renderer;
-import sokoban.game.renderer.swing.SwingGamePanel;
 import sokoban.game.renderer.swing.SwingRenderer;
 
 public class Application {
@@ -11,29 +10,23 @@ public class Application {
     private final Game _game = new Game();
     private Renderer _renderer;
 
-    public void run(){
-        runSwingRenderer();
+    public void runConsole(){
+        run_console_renderer();
+    }
+    public void runSwing(){
+        run_swing_renderer();
     }
 
-    private void runSwingRenderer() {
+
+    private void run_console_renderer(){
+        _game.start();
+        _renderer = new ConsoleRenderer(_game);
+        _renderer.start();
+    }
+    
+    private void run_swing_renderer() {
         _game.start();
         _renderer = new SwingRenderer(_game);
-        ((SwingRenderer)_renderer).setGame(_game);
-
-    }
-
-    public void runConsoleRenderer(){
-        _renderer = new ConsoleRenderer();
-        _game.start();
-        while(_game.is_running()){
-            try{
-                _game.iterate();
-                _renderer.render(_game);
-                _renderer.input(_game);
-            }catch(Exception e){
-                _game.set_running(false);
-                e.printStackTrace();
-            }
-        }
+        _renderer.start();
     }
 }
