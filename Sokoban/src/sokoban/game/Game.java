@@ -12,7 +12,7 @@ import static sokoban.game.Map.generateBoxMap;
 
 public class Game {
 	public static final String SAVE_TYPE = ".sok";
-	public final String[] levels = {"level01.sokl", "level02.sokl", "wacky.sokl", "suspect.sokl"};
+	public final String[] levels = {"level01.sokl", "level02.sokl", "wacky.sokl", "suspect.sokl", "lost.sokl"};
 	
 	private Stack<byte[]> _undo_states = new Stack<>();
 	private Stack<byte[]> _redo_states = new Stack<>();
