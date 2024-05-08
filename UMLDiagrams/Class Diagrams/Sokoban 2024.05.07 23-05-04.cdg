@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Sokoban">
+  <ClassDiagramComponents>
+    <Class name="Application" package="sokoban" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="_game" type="Game" visibility="private" isFinal="true"/>
+        <Field name="_renderer" type="Renderer" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="run" returnType="void" visibility="public"/>
+        <Method name="runSwingRenderer" returnType="void" visibility="private"/>
+        <Method name="runConsoleRenderer" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Coord2DInt" package="sokoban.game" visibility="public" xPosition="320.0" yPosition="20.0">
+      <Fields>
+        <Field name="x" type="int" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Box" package="sokoban.game.entity" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Coord2DInt" name="_position"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="Game" name="g"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Entity" package="sokoban.game.entity" visibility="public" xPosition="920.0" yPosition="20.0">
+      <Fields>
+        <Field name="_position" type="Coord2DInt" visibility="protected"/>
+        <Field name="_pushable" type="Boolean" visibility="protected"/>
+        <Field name="_walkable" type="Boolean" visibility="protected"/>
+        <Field name="_game" type="Game" visibility="protected" isTransient="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Coord2DInt" name="_position"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="Game" name="g"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="move" returnType="boolean" visibility="protected">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="Move" returnType="void" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="is_walkable" returnType="Boolean" visibility="public"/>
+        <Method name="is_pushable" returnType="Boolean" visibility="public"/>
+        <Method name="setGame" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="setPosition" returnType="void" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="getPosition" returnType="Coord2DInt" visibility="public"/>
+        <Method name="iterate" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Goal" package="sokoban.game.entity" visibility="public" xPosition="1220.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Coord2DInt" name="_position"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="Game" name="g"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Player" package="sokoban.game.entity" visibility="public" xPosition="1520.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Game" name="g"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="Move" returnType="void" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="iterate" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Game" package="sokoban.game" visibility="public" xPosition="1820.0" yPosition="20.0">
+      <Fields>
+        <Field name="SAVE_TYPE" type="String" visibility="public" isFinal="true"/>
+        <Field name="levels" type="String[]" visibility="public" isFinal="true"/>
+        <Field name="current_level" type="int" visibility="public"/>
+        <Field name="_running" type="boolean" visibility="private"/>
+        <Field name="_entity_list" type="List&lt;Entity&gt;" visibility="private"/>
+        <Field name="_map" type="Map" visibility="private"/>
+        <Field name="save_file" type="String" visibility="public"/>
+        <Field name="picked_entity" type="String" visibility="package"/>
+        <Field name="picked_tile" type="String" visibility="package"/>
+        <Field name="cursor" type="Coord2DInt" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="loadLevel" returnType="void" visibility="public"/>
+        <Method name="get_entity_list" returnType="List&lt;Entity&gt;" visibility="public"/>
+        <Method name="add_entity" returnType="void" visibility="public">
+          <Argument type="Entity" name="e"/>
+          <Argument type="Coord2DInt" name="pos"/>
+        </Method>
+        <Method name="get_player" returnType="Entity" visibility="public"/>
+        <Method name="get_map" returnType="Map" visibility="public"/>
+        <Method name="is_running" returnType="boolean" visibility="public"/>
+        <Method name="set_running" returnType="void" visibility="public">
+          <Argument type="boolean" name="_running"/>
+        </Method>
+        <Method name="iterate" returnType="void" visibility="public"/>
+        <Method name="isTileWalkable" returnType="boolean" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="input" returnType="void" visibility="public">
+          <Argument type="String" name="input"/>
+        </Method>
+        <Method name="place" returnType="void" visibility="private"/>
+        <Method name="remove_entities_at" returnType="void" visibility="private">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="save" returnType="void" visibility="private">
+          <Argument type="String" name="s_file"/>
+        </Method>
+        <Method name="save" returnType="void" visibility="private"/>
+        <Method name="load" returnType="void" visibility="private">
+          <Argument type="String" name="file_name"/>
+        </Method>
+        <Method name="load" returnType="void" visibility="private"/>
+        <Method name="start" returnType="void" visibility="public"/>
+        <Method name="pushEntity" returnType="void" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+          <Argument type="int" name="x1"/>
+          <Argument type="int" name="y1"/>
+        </Method>
+        <Method name="loadNextLevel" returnType="void" visibility="public"/>
+        <Method name="goalsLeft" returnType="int" visibility="public"/>
+        <Method name="createMap" returnType="void" visibility="public">
+          <Argument type="int" name="width"/>
+          <Argument type="int" name="height"/>
+        </Method>
+        <Method name="setPickedEntity" returnType="void" visibility="public">
+          <Argument type="String" name="selectedValue"/>
+        </Method>
+        <Method name="setPickedTile" returnType="void" visibility="public">
+          <Argument type="String" name="selectedValue"/>
+        </Method>
+        <Method name="setCursorPos" returnType="void" visibility="public">
+          <Argument type="Coord2DInt" name="cursorPos"/>
+        </Method>
+        <Method name="getCursorPos" returnType="Coord2DInt" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Map" package="sokoban.game" visibility="public" xPosition="2120.0" yPosition="20.0">
+      <Fields>
+        <Field name="_map" type="int[]" visibility="private"/>
+        <Field name="_size_x" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="sizeX"/>
+          <Argument type="int" name="sizeY"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="GenerateBoxMap" returnType="Map" visibility="public" isStatic="true">
+          <Argument type="int" name="width"/>
+          <Argument type="int" name="height"/>
+        </Method>
+        <Method name="initialize" returnType="void" visibility="public"/>
+        <Method name="GenerateTestMap" returnType="Map" visibility="public" isStatic="true"/>
+        <Method name="get_size_x" returnType="int" visibility="public"/>
+        <Method name="get_size_y" returnType="int" visibility="public"/>
+        <Method name="getTile" returnType="Tile" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+        </Method>
+        <Method name="setTile" returnType="void" visibility="public">
+          <Argument type="int" name="x"/>
+          <Argument type="int" name="y"/>
+          <Argument type="Tile" name="t"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Interface name="Renderer" package="sokoban.game.renderer" visibility="public" xPosition="20.0" yPosition="420.0">
+      <Methods>
+        <Method name="render" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="input" returnType="void" visibility="package">
+          <Argument type="Game" name="game"/>
+        </Method>
+      </Methods>
+    </Interface>
+    <Class name="SwingColors" package="sokoban.game.renderer.swing" visibility="public" xPosition="320.0" yPosition="420.0">
+      <Fields>
+        <Field name="WALL" type="Color" visibility="package" isStatic="true"/>
+        <Field name="FLOOR" type="Color" visibility="package" isStatic="true"/>
+        <Field name="BACKGROUND" type="Color" visibility="package" isStatic="true"/>
+        <Field name="BOX" type="Color" visibility="package" isStatic="true"/>
+        <Field name="PLAYER" type="Color" visibility="package" isStatic="true"/>
+        <Field name="GOAL" type="Color" visibility="package" isStatic="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SwingEditFrame" package="sokoban.game.renderer.swing" visibility="public" xPosition="620.0" yPosition="420.0">
+      <Fields>
+        <Field name="_game" type="Game" visibility="private"/>
+        <Field name="_panel" type="SwingGamePanel" visibility="private"/>
+        <Field name="jChangeMapButton" type="javax.swing.JButton" visibility="private"/>
+        <Field name="jEntityList" type="javax.swing.JList&lt;String&gt;" visibility="private"/>
+        <Field name="jLabel1" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="jLabel2" type="javax.swing.JLabel" visibility="private"/>
+        <Field name="jMapHeight" type="javax.swing.JSpinner" visibility="private"/>
+        <Field name="jMapWidth" type="javax.swing.JSpinner" visibility="private"/>
+        <Field name="jScrollPane1" type="javax.swing.JScrollPane" visibility="private"/>
+        <Field name="jScrollPane2" type="javax.swing.JScrollPane" visibility="private"/>
+        <Field name="jTileList" type="javax.swing.JList&lt;String&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="SwingGameFrame" name="p"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setGame" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="setPanel" returnType="void" visibility="public">
+          <Argument type="SwingGamePanel" name="panel"/>
+        </Method>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+void" visibility="private"/>
+        <Method name="jChangeMapButtonActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="jEntityListValueChanged" returnType="void" visibility="private">
+          <Argument type="javax.swing.event.ListSelectionEvent" name="evt"/>
+        </Method>
+        <Method name="jTileListValueChanged" returnType="void" visibility="private">
+          <Argument type="javax.swing.event.ListSelectionEvent" name="evt"/>
+        </Method>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SwingGameFrame" package="sokoban.game.renderer.swing" visibility="public" xPosition="920.0" yPosition="420.0">
+      <Fields>
+        <Field name="g" type="Game" visibility="package"/>
+        <Field name="_game" type="Game" visibility="protected"/>
+        <Field name="editFrame" type="SwingEditFrame" visibility="package"/>
+        <Field name="jAboutItem" type="javax.swing.JMenuItem" visibility="private"/>
+        <Field name="jCheckBoxEdit" type="javax.swing.JCheckBoxMenuItem" visibility="private"/>
+        <Field name="jGamePanel" type="javax.swing.JPanel" visibility="private"/>
+        <Field name="jLoadItem" type="javax.swing.JMenuItem" visibility="private"/>
+        <Field name="jMenu3" type="javax.swing.JMenu" visibility="private"/>
+        <Field name="jMenu4" type="javax.swing.JMenu" visibility="private"/>
+        <Field name="jMenuBar2" type="javax.swing.JMenuBar" visibility="private"/>
+        <Field name="jRestartItem" type="javax.swing.JMenuItem" visibility="private"/>
+        <Field name="jSaveAsItem" type="javax.swing.JMenuItem" visibility="private"/>
+        <Field name="jSaveItem" type="javax.swing.JMenuItem" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Game" name="game"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setGame" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="getGame" returnType="Game" visibility="public"/>
+        <Method name="getGamePanel" returnType="SwingGamePanel" visibility="public"/>
+        <Method name="initComponents" returnType="// &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+void" visibility="private"/>
+        <Method name="jAboutItemActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="jLoadItemActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="load" returnType="void" visibility="private"/>
+        <Method name="jSaveItemActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="save" returnType="void" visibility="private"/>
+        <Method name="save" returnType="void" visibility="private">
+          <Argument type="String" name="file"/>
+        </Method>
+        <Method name="jRestartItemActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="jCheckBoxEditActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="jSaveAsItemActionPerformed" returnType="void" visibility="private">
+          <Argument type="java.awt.event.ActionEvent" name="evt"/>
+        </Method>
+        <Method name="closeEditBox" returnType="void" visibility="public"/>
+        <Method name="restart" returnType="void" visibility="private"/>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SwingGamePanel" package="sokoban.game.renderer.swing" visibility="public" xPosition="1220.0" yPosition="420.0">
+      <Fields>
+        <Field name="_game" type="Game" visibility="private"/>
+        <Field name="_is_editing" type="Boolean" visibility="private"/>
+        <Field name="_tilemap" type="BufferedImage" visibility="private"/>
+        <Field name="_block_image" type="BufferedImage" visibility="private"/>
+        <Field name="_goal_image" type="BufferedImage" visibility="private"/>
+        <Field name="_floor_image" type="BufferedImage" visibility="private"/>
+        <Field name="_wall_image" type="BufferedImage" visibility="private"/>
+        <Field name="_player_image" type="BufferedImage" visibility="private"/>
+        <Field name="scale_x" type="float" visibility="private"/>
+        <Field name="scale_y" type="float" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Game" name="game"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setEditing" returnType="void" visibility="public">
+          <Argument type="Boolean" name="b"/>
+        </Method>
+        <Method name="setGame" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="paintComponent" returnType="void" visibility="protected">
+          <Argument type="Graphics" name="g"/>
+        </Method>
+        <Method name="keyTyped" returnType="void" visibility="public">
+          <Argument type="KeyEvent" name="e"/>
+        </Method>
+        <Method name="keyPressed" returnType="void" visibility="public">
+          <Argument type="KeyEvent" name="e"/>
+        </Method>
+        <Method name="keyReleased" returnType="void" visibility="public">
+          <Argument type="KeyEvent" name="e"/>
+        </Method>
+        <Method name="mouseClicked" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mousePressed" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseReleased" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseEntered" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseExited" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseDragged" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseMoved" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SwingRenderer" package="sokoban.game.renderer.swing" visibility="public" xPosition="1520.0" yPosition="420.0">
+      <Fields>
+        <Field name="_game" type="Game" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Game" name="game"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="render" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="setGame" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="input" returnType="void" visibility="public">
+          <Argument type="Game" name="game"/>
+        </Method>
+        <Method name="renderException" returnType="void" visibility="public" isStatic="true">
+          <Argument type="Component" name="c"/>
+          <Argument type="Exception" name="e"/>
+        </Method>
+        <Method name="renderMessage" returnType="void" visibility="public" isStatic="true">
+          <Argument type="Component" name="c"/>
+          <Argument type="String" name="message"/>
+          <Argument type="String" name="title"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Sokoban" package="sokoban" visibility="public" xPosition="1820.0" yPosition="420.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="_game" source="sokoban.game.renderer.swing.SwingGamePanel" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_game" source="sokoban.game.renderer.swing.SwingRenderer" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.renderer.swing.SwingEditFrame" target="sokoban.game.renderer.swing.SwingGamePanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.renderer.swing.SwingGamePanel" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.entity.Entity" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.Map" target="sokoban.game.Map" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_map" source="sokoban.game.Game" target="sokoban.game.Map" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Map"/>
+    <HasRelation name="editFrame" source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.renderer.swing.SwingEditFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="g" source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.renderer.swing.SwingGamePanel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_renderer" source="sokoban.Application" target="sokoban.game.renderer.Renderer" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.renderer.Renderer" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_panel" source="sokoban.game.renderer.swing.SwingEditFrame" target="sokoban.game.renderer.swing.SwingGamePanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.Game" target="sokoban.game.Coord2DInt" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="sokoban.game.entity.Player" target="sokoban.game.entity.Entity"/>
+    <IsRelation name="is" source="sokoban.game.entity.Box" target="sokoban.game.entity.Entity"/>
+    <UseRelation source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.entity.Entity" target="sokoban.game.Coord2DInt" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="sokoban.game.renderer.swing.SwingRenderer" target="sokoban.game.renderer.Renderer"/>
+    <HasRelation name="_game" source="sokoban.game.entity.Entity" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="cursor" source="sokoban.game.Game" target="sokoban.game.Coord2DInt" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_game" source="sokoban.game.renderer.swing.SwingGameFrame" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_entity_list" source="sokoban.game.Game" target="sokoban.game.entity.Entity" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Entity&gt;"/>
+    <UseRelation source="sokoban.game.Game" target="sokoban.game.Map" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_game" source="sokoban.Application" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="sokoban.game.entity.Goal" target="sokoban.game.entity.Entity"/>
+    <UseRelation source="sokoban.game.Game" target="sokoban.game.entity.Entity" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.renderer.swing.SwingRenderer" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_position" source="sokoban.game.entity.Entity" target="sokoban.game.Coord2DInt" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="_game" source="sokoban.game.renderer.swing.SwingEditFrame" target="sokoban.game.Game" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="sokoban.game.renderer.swing.SwingEditFrame" target="sokoban.game.Game" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
