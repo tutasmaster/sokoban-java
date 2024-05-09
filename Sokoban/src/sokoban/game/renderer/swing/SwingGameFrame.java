@@ -244,7 +244,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.input("load");
             jGamePanel.repaint();
         } catch (Exception e) {
-            SwingRenderer.renderException(this, e);
+            SwingRenderer.renderException(e);
         }
     }
 
@@ -258,7 +258,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.input("save");
             jGamePanel.repaint();
         } catch (Exception e) {
-            SwingRenderer.renderException(this, e);
+            SwingRenderer.renderException(e);
         }
     }
 
@@ -268,7 +268,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.input("save");
             jGamePanel.repaint();
         } catch (Exception e) {
-            SwingRenderer.renderException(this, e);
+            SwingRenderer.renderException(e);
         }
     }
 
@@ -277,7 +277,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.saveLevel(file);
             jGamePanel.repaint();
         } catch (Exception e) {
-            SwingRenderer.renderException(this, e);
+            SwingRenderer.renderException(e);
         }
     }
 
@@ -286,7 +286,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
             _game.loadExternalLevel(file);
             jGamePanel.repaint();
         } catch (Exception e) {
-            SwingRenderer.renderException(this, e);
+            SwingRenderer.renderException(e);
         }
     }
 

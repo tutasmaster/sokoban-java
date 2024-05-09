@@ -71,7 +71,7 @@ public class SwingEditFrame extends javax.swing.JFrame {
         jTileList.setBackground(new java.awt.Color(51, 51, 51));
         jTileList.setForeground(new java.awt.Color(255, 255, 255));
         jTileList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Empty", "Wall", "Floor" };
+            String[] strings = { "Empty", "Wall", "Floor", "Ice" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });

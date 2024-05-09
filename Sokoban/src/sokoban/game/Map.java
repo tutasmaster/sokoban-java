@@ -7,12 +7,14 @@ public class Map implements Serializable {
     public static final char EMPTY_CHAR = ' ';
     public static final char WALL_CHAR = '#';
     public static final char FLOOR_CHAR = '.';
+    public static final char ICE_CHAR = ',';
     public static final char INVALID_CHAR = '?';
     
     public enum Tile {
         EMPTY,
         FLOOR,
-        WALL
+        WALL,
+        ICE
     }
     
     public Map(int sizeX, int sizeY) {
@@ -156,6 +158,9 @@ public class Map implements Serializable {
                     case WALL:
                         result.append(WALL_CHAR);
                         break;
+                    case ICE:
+                        result.append(ICE_CHAR);
+                        break;
                     default :
                         result.append(INVALID_CHAR);
                         break;
@@ -186,6 +191,9 @@ public class Map implements Serializable {
                     case WALL_CHAR:
                         map.setTile(x, y, Tile.WALL);
                         break;
+                    case ICE_CHAR:
+                        map.setTile(x, y, Tile.ICE);
+                        break;
                     default :
                         map.setTile(x, y, Tile.FLOOR);
                         break;
@@ -205,6 +213,4 @@ public class Map implements Serializable {
     public int parsedCoordToIdx(int x, int y) {
         return x + (y * (_width + 1));
     }
-    
-
 }

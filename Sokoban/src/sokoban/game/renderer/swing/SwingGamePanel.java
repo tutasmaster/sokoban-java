@@ -42,10 +42,11 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             _floor_image = _tilemap.getSubimage(32, 0, 16, 16);
             _wall_image = _tilemap.getSubimage(48, 0, 16, 16);
             _player_image = _tilemap.getSubimage(64, 0, 16, 16);
+            _ice_image = _tilemap.getSubimage(80,0,16,16);
             _push_audio = loadSound("assets/push2.wav");
             _goal_audio = loadSound("assets/goal.wav");
         } catch (Exception e) {
-            SwingRenderer.renderException(this,e);
+            SwingRenderer.renderException(e);
         }
     }
 
@@ -65,6 +66,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     private BufferedImage _floor_image;
     private BufferedImage _wall_image;
     private BufferedImage _player_image;
+    private BufferedImage _ice_image;
     private Clip _push_audio;
     private Clip _goal_audio;
     private float scale_x = 25;
@@ -116,6 +118,10 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
                     g.setColor(SwingColors.FLOOR);
                     g.fillRect(posX, posY, sX + 1, sY + 1);
                     g.drawImage(_floor_image, posX, posY, sX + 1, sY + 1, null);
+                }else if (t == Map.Tile.ICE) {
+                    g.setColor(SwingColors.FLOOR);
+                    g.fillRect(posX, posY, sX + 1, sY + 1);
+                    g.drawImage(_ice_image, posX, posY, sX + 1, sY + 1, null);
                 }
             }
         }
@@ -206,7 +212,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             handleInputResult(r);
             repaint();
         } catch (Exception ex) {
-            renderException(this, ex);
+            renderException(ex);
         }
     }
     
@@ -214,10 +220,10 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         if (r == Game.INPUT_RESULT.NEXT_LEVEL) {
             _goal_audio.setMicrosecondPosition(0);
             _goal_audio.start();
-            renderMessage(this, "You beat level " + _game.currentLevel + "!", "Congratulations");
+            renderMessage("You beat level " + _game.currentLevel + "!", "Congratulations");
         }else if(r == Game.INPUT_RESULT.END) {
             _goal_audio.start();
-            renderMessage(this, "You won the game!", "Congratulations");
+            renderMessage("You won the game!", "Congratulations");
         }else if(r == Game.INPUT_RESULT.PUSHED){
             _push_audio.stop();
             _push_audio.setMicrosecondPosition(0);
@@ -247,7 +253,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
                 Game.INPUT_RESULT r = _game.walkTo(cursor_pos);
                 handleInputResult(r);
             }catch(Exception ex){
-                SwingRenderer.renderException(this,ex);
+                SwingRenderer.renderException(ex);
             }
             return;
         }
@@ -257,7 +263,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             _game.input("place");
             repaint();
         } catch (Exception ex) {
-            renderException(this, ex);
+            renderException(ex);
         }
     }
 
@@ -291,7 +297,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             _game.input("place");
             repaint();
         } catch (Exception ex) {
-            renderException(this, ex);
+            renderException(ex);
         }
     }
 
@@ -312,7 +318,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             repaint();
             handleInputResult(r);
         } catch (Exception ex) {
-            renderException(this, ex);
+            renderException(ex);
         }
     }
 }

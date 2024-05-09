@@ -1,9 +1,11 @@
 package sokoban.game.entity;
 
+import sokoban.game.Map;
 import sokoban.game.Vector2;
 import sokoban.game.Game;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Entity implements Serializable {
 
@@ -24,6 +26,17 @@ public class Entity implements Serializable {
     protected Vector2 _position;
     protected Boolean _pushable = false;
     protected Boolean _walkable = false;
+    
+    
+    /*
+     * We have decided that if the game saves during an automated walk,
+     * such as what happens when playing with a mouse, or slipping on ice
+     * The path should not be serialized and stored in the save file.
+     */
+    transient public ArrayList<Vector2> path;
+    public void setPath(ArrayList<Vector2> p) {
+        path = p;
+    }
     
     /*
     Game is transient because we cannot have references in the Serialized version of the Object
@@ -106,11 +119,35 @@ public class Entity implements Serializable {
     /**
      * Is used whenever there is an interaction that happens between turns
      * As it is, it's only used when the player uses pathfinding, when playing with the mouse
+     * --ADDED--
+     * It now affects every entity, because ice can cause a similar interaction
      */
-    public void iterate() { }
+    public void iterate() {
+        if (path != null && !path.isEmpty()) {
+            Vector2 next_pos = path.get(path.size() - 1);
+            path.remove(path.size() - 1);
+            _position = next_pos;
+        }
+    }
+    public boolean isPathing(){
+        return !(path == null || path.isEmpty());
+    }
     protected boolean moveInternal(int x, int y) {
+        Map.Tile tile = _game.getMap().getTile(_position.x + x, _position.y + y);
         if (_game.isTileWalkable(_position.x + x, _position.y + y)) {
             _position = new Vector2(_position.x + x, _position.y + y);
+            //Calculate slip on ice
+            if(_game.isTileSlippery(_position.x, _position.y)){
+                path = new ArrayList<>();
+                int ice_count = 1;
+                while(_game.isTileWalkable(_position.x + (x*ice_count), _position.y + (y*ice_count))){
+                    path.add(0,new Vector2(_position.x + (x*ice_count), _position.y + (y*ice_count)));
+                    if(!_game.isTileSlippery(_position.x + (x*ice_count), _position.y + (y*ice_count))){
+                        break;
+                    }
+                    ice_count++;
+                }
+            }
             return true;
         }
         return false;

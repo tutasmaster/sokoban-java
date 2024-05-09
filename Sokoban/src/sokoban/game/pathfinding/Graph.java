@@ -32,7 +32,9 @@ public class Graph {
     }
     
     private void validateNode(Node current, Node next, ArrayList<Node> neighbours) {
-        if (_game.isTileWalkable(next.pos.x, next.pos.y)) {
+        //We do not want the player to just walk through the ice.
+        if (   _game.isTileWalkable(next.pos.x, next.pos.y)
+                && !_game.isTileSlippery(next.pos.x, next.pos.y)) {
             next.parent = current;
             neighbours.add(next);
         }

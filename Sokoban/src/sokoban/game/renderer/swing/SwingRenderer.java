@@ -4,26 +4,33 @@ import sokoban.game.Game;
 import sokoban.game.renderer.Renderer;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class SwingRenderer implements Renderer {
     public SwingRenderer(Game game) {
         setGame(game);
     }
-
-
+    
     private Game _game;
 
     public void setGame(Game game) {
         _game = game;
     }
 
-    public static void renderException(Component c, Exception e) {
-        JOptionPane.showMessageDialog(c, e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
+    
+    public static void renderException(Exception e) {
+        //We use a JFrame to prevent the exception from not being displayed on top of
+        //other UI Elements
+        JFrame jframe=new JFrame();
+        jframe.setAlwaysOnTop(true);
+        JOptionPane.showMessageDialog(jframe, e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void renderMessage(Component c, String message, String title) {
-        JOptionPane.showMessageDialog(c, message, title, JOptionPane.PLAIN_MESSAGE);
+    public static void renderMessage(String message, String title) {
+        //We use a JFrame to prevent the message from not being displayed on top of
+        //other UI Elements
+        JFrame jframe=new JFrame();
+        jframe.setAlwaysOnTop(true);
+        JOptionPane.showMessageDialog(jframe, message, title, JOptionPane.PLAIN_MESSAGE);
     }
     
     @Override

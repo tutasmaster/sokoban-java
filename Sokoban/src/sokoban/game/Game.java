@@ -83,12 +83,21 @@ public class Game {
 	
 	public boolean isTileWalkable(int x, int y) {
 		if (x > -1 && x < _map.getWidth() && y > -1 && y < _map.getHeight()) {
-			if (_map.getTile(x, y) == Map.Tile.FLOOR) {
+			if (_map.getTile(x, y) == Map.Tile.FLOOR || _map.getTile(x,y) == Map.Tile.ICE) {
 				for (Entity entity : _entity_list) {
 					if (entity.getPosition().x == x && entity.getPosition().y == y && !entity.isWalkable()) {
 						return false;
 					}
 				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isTileSlippery(int x, int y) {
+		if (x > -1 && x < _map.getWidth() && y > -1 && y < _map.getHeight()) {
+			if (_map.getTile(x, y) == Map.Tile.ICE) {
 				return true;
 			}
 		}
@@ -182,6 +191,9 @@ public class Game {
 					break;
 				case "Floor":
 					_map.setTile(_cursor.x, _cursor.y, Map.Tile.FLOOR);
+					break;
+				case "Ice":
+					_map.setTile(_cursor.x, _cursor.y, Map.Tile.ICE);
 					break;
 			}
 		}
@@ -410,8 +422,8 @@ public class Game {
 	public INPUT_RESULT walkTo(Vector2 cursorPosition) throws Exception {
 		hasPushed = false;
         Vector2 playerPosition = getPlayer().getPosition();
+		saveState();
 		if (cursorPosition.getDistanceTo(playerPosition) < 1.05) {
-			saveState();
 			getPlayer().move(cursorPosition.x - playerPosition.x, cursorPosition.y - playerPosition.y);
 			if (hasPushed)
 				return INPUT_RESULT.PUSHED;
