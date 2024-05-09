@@ -179,6 +179,10 @@ public class Game {
 					_map.setTile(_cursor.x, _cursor.y, Map.Tile.FLOOR);
 					_entity_list.add(new Goal(this, _cursor));
 					break;
+				case "Hole":
+					_map.setTile(_cursor.x, _cursor.y, Map.Tile.FLOOR);
+					_entity_list.add(new Hole(this, _cursor));
+					break;
 				case "Erase":
 					break;
 			}

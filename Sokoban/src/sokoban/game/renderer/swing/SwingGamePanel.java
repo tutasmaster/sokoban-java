@@ -3,10 +3,8 @@ package sokoban.game.renderer.swing;
 import sokoban.game.Vector2;
 import sokoban.game.Game;
 import sokoban.game.Map;
+import sokoban.game.entity.*;
 import sokoban.game.entity.Box;
-import sokoban.game.entity.Entity;
-import sokoban.game.entity.Goal;
-import sokoban.game.entity.Player;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
@@ -43,6 +41,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             _wall_image = _tilemap.getSubimage(48, 0, 16, 16);
             _player_image = _tilemap.getSubimage(64, 0, 16, 16);
             _ice_image = _tilemap.getSubimage(80,0,16,16);
+            _hole_image = _tilemap.getSubimage(80+16,0,16,16);
+            _hole_close_image = _tilemap.getSubimage(80+32,0,16,16);
             _push_audio = loadSound("assets/push2.wav");
             _goal_audio = loadSound("assets/goal.wav");
         } catch (Exception e) {
@@ -67,6 +67,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     private BufferedImage _wall_image;
     private BufferedImage _player_image;
     private BufferedImage _ice_image;
+    private BufferedImage _hole_image;
+    private BufferedImage _hole_close_image;
     private Clip _push_audio;
     private Clip _goal_audio;
     private float scale_x = 25;
@@ -135,6 +137,18 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
                 g.setColor(SwingColors.GOAL);
                 //g.drawRect(gridPosX + 4, gridPosY + 4, (int)scale_x - 8, (int)scale_y - 8);
                 g.drawImage(_goal_image, gridPosX, gridPosY, (int) scale_x, (int) scale_y, null);
+            }else if (e.getClass() == Hole.class) {
+                Vector2 p = e.getPosition();
+                int gridPosX = (int) (p.x * scale_x) + offset_x;
+                int gridPosY = (int) (p.y * scale_y) + offset_y;
+                g.setColor(SwingColors.GOAL);
+                //g.drawRect(gridPosX + 4, gridPosY + 4, (int)scale_x - 8, (int)scale_y - 8);
+                Hole h = (Hole)e;
+                if(((Hole) e).containsBox()){
+                    g.drawImage(_hole_close_image, gridPosX, gridPosY, (int) scale_x, (int) scale_y, null);
+                }else{
+                    g.drawImage(_hole_image, gridPosX, gridPosY, (int) scale_x, (int) scale_y, null);
+                }
             }
         }
 

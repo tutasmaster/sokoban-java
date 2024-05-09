@@ -85,7 +85,7 @@ public class SwingEditFrame extends javax.swing.JFrame {
         jEntityList.setBackground(new java.awt.Color(51, 51, 51));
         jEntityList.setForeground(new java.awt.Color(255, 255, 255));
         jEntityList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Box", "Goal", "Empty" };
+            String[] strings = { "Box", "Goal", "Hole", "Empty" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -96,7 +96,7 @@ public class SwingEditFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jEntityList);
 
-        jMapWidth.setValue(_game.getMap().getWidth());
+        jMapWidth.setValue(_game.getMap().getHeight());
 
         jMapHeight.setToolTipText("");
         jMapHeight.setValue(_game.getMap().getHeight());

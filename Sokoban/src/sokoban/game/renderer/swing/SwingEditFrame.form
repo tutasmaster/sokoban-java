@@ -170,10 +170,11 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="3">
+                  <StringArray count="4">
                     <StringItem index="0" value="Box"/>
                     <StringItem index="1" value="Goal"/>
-                    <StringItem index="2" value="Empty"/>
+                    <StringItem index="2" value="Hole"/>
+                    <StringItem index="3" value="Empty"/>
                   </StringArray>
                 </Property>
               </Properties>
