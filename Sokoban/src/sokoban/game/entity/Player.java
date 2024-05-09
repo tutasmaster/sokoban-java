@@ -19,6 +19,9 @@ public class Player extends Entity {
 
     @Override
     public boolean move(int x, int y) {
+        if(isPathing()){
+            return false;
+        }
         if (!moveInternal(x, y)) {
             _game.pushEntity(_position.x + x, _position.y + y, x, y);
             return false;

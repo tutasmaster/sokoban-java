@@ -11,6 +11,7 @@ import java.util.Stack;
 import static sokoban.game.Map.generateBoxMap;
 
 public class Game {
+	public static final int MAXIMUM_UNDO = 50;
 	public static final String SAVE_TYPE = ".sok";
 	public final String[] levels = {"level01.sokl", "level02.sokl", "wacky.sokl", "suspect.sokl", "lost.sokl"};
 	
@@ -211,7 +212,17 @@ public class Game {
 		file.close();
 	}
 	
+	private void invalidateStates(){
+		if(_undo_states.size() > MAXIMUM_UNDO){
+			_undo_states.remove(0);
+		}
+		if(_redo_states.size() > MAXIMUM_UNDO){
+			_redo_states.remove(0);
+		}
+	}
+	
 	private void saveState() throws Exception {
+		invalidateStates();
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		save(outputStream);
 		_undo_states.push(outputStream.toByteArray());
@@ -219,6 +230,7 @@ public class Game {
 	}
 	
 	private void loadState() throws Exception {
+		invalidateStates();
 		if (_undo_states.size() == 0) {
 			return;
 		}
@@ -420,6 +432,9 @@ public class Game {
 	}
 	
 	public INPUT_RESULT walkTo(Vector2 cursorPosition) throws Exception {
+		if(getPlayer().isPathing()){
+			return INPUT_RESULT.NONE;
+		}
 		hasPushed = false;
         Vector2 playerPosition = getPlayer().getPosition();
 		saveState();

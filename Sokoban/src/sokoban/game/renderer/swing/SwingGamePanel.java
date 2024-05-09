@@ -31,9 +31,9 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
-
-        Timer timer = new Timer(1000 / 30, this);
-        timer.start();
+        
+        _timer = new Timer(1000 / 10, this);
+        _timer.start();
         try {
             URL resource = Map.class.getResource("assets/tilemap.png");
             BufferedImage _tilemap = ImageIO.read(Objects.requireNonNull(resource));
@@ -49,7 +49,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             SwingRenderer.renderException(e);
         }
     }
-
+    private Timer _timer;
     private Game _game;
     private Boolean _is_editing = false;
 
@@ -217,6 +217,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     }
     
     private void handleInputResult(Game.INPUT_RESULT r) {
+        
+        _timer.restart();
         if (r == Game.INPUT_RESULT.NEXT_LEVEL) {
             _goal_audio.setMicrosecondPosition(0);
             _goal_audio.start();
