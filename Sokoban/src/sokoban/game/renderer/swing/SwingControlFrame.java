@@ -7,6 +7,8 @@ package sokoban.game.renderer.swing;
 
 import sokoban.game.Game;
 
+import javax.swing.*;
+
 /**
  *
  * @author Tutas
@@ -16,12 +18,14 @@ public class SwingControlFrame extends javax.swing.JFrame {
     /**
      * Creates new form SwingControlFrame
      */
-    public SwingControlFrame(Game game) {
+    public SwingControlFrame(Game game, SwingGamePanel panel) {
         setGame(game);
+        setPanel(panel);
         initComponents();
     }
     
     private Game _game;
+    private SwingGamePanel _panel;
     public void setGame(Game game) {
         _game = game;
     }
@@ -146,7 +150,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            _game.input("up");
+            Game.INPUT_RESULT r = _game.input("up");
+            _panel.handleInputResult(r);
         } catch (Exception e) {
             SwingRenderer.renderException(e);
         }
@@ -154,7 +159,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
-            _game.input("right");
+            Game.INPUT_RESULT r = _game.input("right");
+            _panel.handleInputResult(r);
         } catch (Exception e) {
             SwingRenderer.renderException(e);
         }
@@ -162,7 +168,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            _game.input("down");
+            Game.INPUT_RESULT r = _game.input("down");
+            _panel.handleInputResult(r);
         } catch (Exception e) {
             SwingRenderer.renderException(e);
         }
@@ -170,7 +177,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            _game.input("left");
+            Game.INPUT_RESULT r = _game.input("left");
+            _panel.handleInputResult(r);
         } catch (Exception e) {
             SwingRenderer.renderException(e);
         }
@@ -183,5 +191,9 @@ public class SwingControlFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
+
+    public void setPanel(SwingGamePanel _panel) {
+        this._panel = _panel;
+    }
     // End of variables declaration//GEN-END:variables
 }

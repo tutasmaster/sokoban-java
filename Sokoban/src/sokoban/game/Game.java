@@ -20,6 +20,7 @@ public class Game {
 	private Stack<byte[]> _redo_states = new Stack<>();
 	public int currentLevel = 0;
 	private boolean _running;
+	private boolean _edit_mode = false;
 	
 	public List<Entity> getEntityList() {
 		return _entity_list;
@@ -60,7 +61,15 @@ public class Game {
 	public void setRunning(boolean _running) {
 		this._running = _running;
 	}
-	
+
+	public void setEditMode(boolean editMode) {
+		this._edit_mode = editMode;
+	}
+
+	public boolean getEditMode() {
+		return _edit_mode;
+	}
+
 	public enum INPUT_RESULT {
 		NONE,
 		NEXT_LEVEL,
@@ -80,6 +89,11 @@ public class Game {
 			_entity_list.remove(e);
 		}
 		_entity_removal_list = new ArrayList<>();
+
+		if(_edit_mode){
+			return INPUT_RESULT.NONE;
+		}
+
 		if (goalsLeft() == 0) {
 			if (loadNextLevel()) {
 				return INPUT_RESULT.NEXT_LEVEL;
@@ -388,6 +402,8 @@ public class Game {
 	}
 	
 	public boolean loadNextLevel() throws Exception {
+		if (_edit_mode)
+			return false;
 		if (currentLevel >= levels.length - 1)
 			return false;
 		

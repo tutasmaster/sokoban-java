@@ -24,6 +24,11 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     protected Game _game;
 
+    public final String editMessage = "To edit, load or save custom levels, you need to enable edit mode.\n" +
+            "Edit mode will disable all progression in the game in order to let you build, play or test custom levels.\n" +
+            "This can be reversed by restarting the game, you will not be able to save your current run while edit mode is enabled.\n" +
+            "\nAre you sure you want to continue?";
+
     public void setGame(Game game) {
         _game = game;
     }
@@ -298,10 +303,11 @@ public class SwingGameFrame extends javax.swing.JFrame {
     SwingEditFrame editFrame = null;
 
     private void jEditLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditLevelActionPerformed
+        if(!canEdit())
+            return;
         if (editFrame == null) {
             editFrame = new SwingEditFrame(this);
             editFrame.setAlwaysOnTop(true);
-            jEditLevel.setSelected(true);
             editFrame.pack();
             editFrame.setVisible(true);
             editFrame.addWindowListener(new WindowAdapter() {
@@ -320,6 +326,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     private void jLoadLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLoadLevelActionPerformed
         // TODO add your handling code here:
+        if(!canEdit())
+            return;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Sokoban Level Data", "sokl"));
         fileChooser.setSelectedFile(new File("level.sokl"));
@@ -329,8 +337,27 @@ public class SwingGameFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLoadLevelActionPerformed
 
+    private boolean canEdit() {
+        if(_game.getEditMode())
+            return true;
+        int response = JOptionPane.showConfirmDialog(this, editMessage, "Edit Mode", JOptionPane.YES_NO_OPTION);
+        if(response == JOptionPane.OK_OPTION){
+            _game.setEditMode(true);
+            jEditLevel.setSelected(true);
+            jSaveItem.setEnabled(false);
+            jLoadItem.setEnabled(false);
+        }else{
+            jEditLevel.setSelected(false);
+            jSaveItem.setEnabled(true);
+            jLoadItem.setEnabled(true);
+        }
+        return response == JOptionPane.OK_OPTION;
+    }
+
     private void jSaveLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSaveLevelActionPerformed
         // TODO add your handling code here:
+        if(!canEdit())
+            return;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Sokoban Level Data", "sokl"));
         fileChooser.setSelectedFile(new File("level.sokl"));
@@ -345,7 +372,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
     private void jMouseModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMouseModeActionPerformed
         // TODO add your handling code here:
         if(controlFrame == null || !controlFrame.isVisible()){
-            controlFrame = new SwingControlFrame(_game);
+            controlFrame = new SwingControlFrame(_game, getGamePanel());
             controlFrame.setAlwaysOnTop(true);
             controlFrame.setVisible(true);
         }else{
@@ -366,7 +393,6 @@ public class SwingGameFrame extends javax.swing.JFrame {
         editFrame = null;
         _game.setCursorPos(null);
         getGamePanel().setEditing(false);
-        jEditLevel.setSelected(false);
         getGamePanel().repaint();
     }
 

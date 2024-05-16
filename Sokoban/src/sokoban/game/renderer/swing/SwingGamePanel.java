@@ -81,8 +81,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void paint(Graphics g) {
+        super.paint(g);
 
         if (_game == null) {
             return;
@@ -187,6 +187,9 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             g.setColor(Color.WHITE);
             g.drawRect((int) (cursor.x * scale_x) + offset_x, (int) (cursor.y * scale_x) + offset_y, sX + 1, sY + 1);
         }
+
+        //g.setColor(Color.WHITE);
+        //g.drawString("STEPS: ",0,d.height);
     }
     
     public static Clip loadSound(String resourceName)
@@ -230,7 +233,7 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         }
     }
     
-    private void handleInputResult(Game.INPUT_RESULT r) {
+    public void handleInputResult(Game.INPUT_RESULT r) {
         
         _timer.restart();
         if (r == Game.INPUT_RESULT.NEXT_LEVEL) {
