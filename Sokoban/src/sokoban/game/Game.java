@@ -4,6 +4,7 @@ import sokoban.game.entity.*;
 import sokoban.game.pathfinding.Graph;
 
 import java.io.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -23,8 +24,11 @@ public class Game {
 	public List<Entity> getEntityList() {
 		return _entity_list;
 	}
-	
 	private List<Entity> _entity_list;
+	public void removeEntity(Entity e) {
+		_entity_removal_list.add(e);
+	}
+	private List<Entity> _entity_removal_list = new ArrayList<>();
 	private String _picked_entity = null;
 	String _picked_tile = null;
 	Vector2 _cursor = null;
@@ -66,14 +70,21 @@ public class Game {
 	}
 	
 	public INPUT_RESULT iterate() throws Exception {
+		if(!isRunning()){
+			return INPUT_RESULT.NONE;
+		}
 		for (Entity entity : _entity_list) {
 			entity.iterate();
 		}
-		
+		for(Entity e : _entity_removal_list){
+			_entity_list.remove(e);
+		}
+		_entity_removal_list = new ArrayList<>();
 		if (goalsLeft() == 0) {
 			if (loadNextLevel()) {
 				return INPUT_RESULT.NEXT_LEVEL;
 			} else {
+				setRunning(false);
 				return INPUT_RESULT.END;
 			}
 		} else if (hasPushed) {

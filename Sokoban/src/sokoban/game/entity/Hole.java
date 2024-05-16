@@ -22,9 +22,9 @@ public class Hole extends Goal{
             if(e.getPosition().x == _position.x
                     && e.getPosition().y == _position.y
                     && e.getClass() == Box.class){
-                _game.getEntityList().remove(e);
                 hasBox = true;
-                return;
+                _game.removeEntity(e);
+                break;
             }
         }
     }
