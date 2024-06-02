@@ -17,6 +17,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form SwingControlFrame
+     * @param game that we are going to control
+     * @param panel that controls the rendering of the game
      */
     public SwingControlFrame(Game game, SwingGamePanel panel) {
         setGame(game);

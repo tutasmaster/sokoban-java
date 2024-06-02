@@ -2,6 +2,9 @@ package sokoban.game;
 
 import java.io.Serializable;
 
+/**
+ * Map used by the game, it contains an integer array, each integer representing a tile
+ */
 public class Map implements Serializable {
     //CONSTANTS
     public static final char EMPTY_CHAR = ' ';
@@ -10,6 +13,9 @@ public class Map implements Serializable {
     public static final char ICE_CHAR = ',';
     public static final char INVALID_CHAR = '?';
     
+    /**
+     * Tiles used by the map
+     */
     public enum Tile {
         EMPTY,
         FLOOR,
@@ -17,6 +23,11 @@ public class Map implements Serializable {
         ICE
     }
     
+    /**
+     * Constructs a map with width and height but does NOT initialized it
+     * @param sizeX width
+     * @param sizeY height
+     */
     public Map(int sizeX, int sizeY) {
         this._width = sizeX;
         this._height = sizeY;
@@ -54,8 +65,8 @@ public class Map implements Serializable {
      * Returns an initialized map surrounded by walls and with a floor on the inside
      * We use it for the map editor whenever there is a change in map size, or when testing out
      * the map generation functions.
-     * @param width
-     * @param height
+     * @param width of the map
+     * @param height of the map
      * @return Map
      */
     public static Map generateBoxMap(int width, int height) {
@@ -108,8 +119,8 @@ public class Map implements Serializable {
      * Returns the tile for a given x and y position
      * It exists because the map is a 1d array and not 2d array.
      * pos = x + (y * width)
-     * @param x
-     * @param y
+     * @param x position
+     * @param y position
      * @return Tile
      */
     public Tile getTile(int x, int y) {
@@ -125,9 +136,9 @@ public class Map implements Serializable {
      * Sets the tile for a given x and y position
      * It exists because the map is a 1d array and not 2d array.
      * pos = x + (y * width)
-     * @param x
-     * @param y
-     * @param tile
+     * @param x position
+     * @param y position
+     * @param tile tile to place
      */
     public void setTile(int x, int y, Tile tile) {
         if (x > -1 && y > -1 && x < _width && y < _height) {
