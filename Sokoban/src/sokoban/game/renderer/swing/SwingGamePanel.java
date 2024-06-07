@@ -20,8 +20,23 @@ import java.util.Objects;
 import static sokoban.game.renderer.swing.SwingRenderer.renderException;
 import static sokoban.game.renderer.swing.SwingRenderer.renderMessage;
 
-public class SwingGamePanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, ActionListener {
 
+/**
+ * The game panel used by SwingRenderer that effectively handles
+ * all Input and Output from the game into the user.<br>
+ * The rest of the UX such as buttons and menu bars are provided by SwingGameFrame and
+ * the other frames.<br>
+ * This only draws the game itself and handles direct inputs such as keyboard or direct
+ * mouse control.
+ */
+public class SwingGamePanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, ActionListener {
+    
+    /**
+     * Constructs a Game Panel with a reference to the game.<br>
+     * It sets the key, mouse and mouse motion listeners.<br>
+     * It also splices the tiles and loads every asset it needs.
+     * @param game reference to a game
+     */
     public SwingGamePanel(Game game) {
         setGame(game);
         setFocusable(true);
@@ -30,9 +45,13 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         addMouseListener(this);
         addMouseMotionListener(this);
         
+        //Animation timer
         _timer = new Timer(1000 / 10, this);
         _timer.start();
+        
         try {
+            /*Tiles get spliced from a tilemap,
+            every tile exists next to each other in tilemap.png*/
             URL resource = Map.class.getResource("assets/tilemap.png");
             BufferedImage _tilemap = ImageIO.read(Objects.requireNonNull(resource));
             _block_image = _tilemap.getSubimage(0, 0, 16, 16);
@@ -57,7 +76,13 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     private Timer _timer;
     private Game _game;
     private Boolean _is_editing = false;
-
+    
+    /**
+     * Sets whether the game is being edited or not,
+     * if it is, then we let show the crosshair cursor for more easy
+     * modification of the tiles.
+     * @param b is editing
+     */
     public void setEditing(Boolean b) {
         _is_editing = b;
         if(_is_editing)
@@ -84,11 +109,30 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     private float scale_y = 25;
     private int offset_x = 0;
     private int offset_y = 0;
-
+    
+    /**
+     * Sets the game reference the panel uses
+     * @param game reference to a game
+     */
     public void setGame(Game game) {
         _game = game;
     }
-
+    
+    /**
+     * This is the core renderer of the game.<br>
+     * It handles things such as scaling, centering, and drawing all the tiles.
+     * It renders certain objects in different loops for the sake of proper ordering like:
+     * <ol>
+     *     <li>Floors</li>
+     *     <li>Goals</li>
+     *     <li>Other entities such as the player</li>
+     *     <li>Boxes, because they overlap the player as an aesthetic choice</li>
+     * </ol>
+     * It clears the screen everytime it executes.<br>
+     * It contains several variables that are used for calculating positions such as center of the screen
+     * or the offset of every tile including scaling.
+     * @param g  the <code>Graphics</code> context in which to paint
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -225,6 +269,17 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         //g.drawString("STEPS: ",0,d.height);
     }
     
+    /**
+     * Loads a sound as a stream.<br>
+     * This is used for audio assets such as the sound of a block
+     * being dragged.<br>
+     * Assets are being loading from the sokoban.game.assets package.
+     * @param resourceName audio file
+     * @return audio clip
+     * @throws IOException if the file doesn't exist
+     * @throws UnsupportedAudioFileException if the audio isn't supported
+     * @throws LineUnavailableException if the file is being used by another application
+     */
     public static Clip loadSound(String resourceName)
             throws IOException, UnsupportedAudioFileException,
             LineUnavailableException {
@@ -239,7 +294,12 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     public void keyTyped(KeyEvent e) {
 
     }
-
+    
+    /**
+     * Sends key presses to the game's input system.
+     * They are converted from a button press, to a string that represents the correct action.
+     * @param e the event to be processed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         String s = "";
@@ -266,6 +326,12 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         }
     }
     
+    /**
+     * Handles whatever result we got from the input such as keyPressed.<br>
+     * An example is a prompt when the user finishes a level, or a sound that plays
+     * when a box gets dragged.
+     * @param r
+     */
     public void handleInputResult(Game.INPUT_RESULT r) {
         
         _timer.restart();
@@ -293,7 +359,21 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     public void mouseClicked(MouseEvent e) {
     
     }
-
+    
+    /**
+     * When a mouse has clicked, the following is dependent on what state the game is in:
+     * <ul>
+     *     <li>
+     *         If the game panel is in edit mode, we place a tile/entity at the cursor position.
+     *     </li>
+     *     <li>
+     *         If the game panel is in game mode, we execute the smart pathfinding towards the cursor.
+     *     </li>
+     * </ul>
+     * This function contains some scaling code since we have to know where exactly
+     * the game exists in the panel.
+     * @param e the event to be processed
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         float sX = (e.getX() - offset_x) / scale_x;
@@ -334,7 +414,12 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     public void mouseExited(MouseEvent e) {
 
     }
-
+    
+    /**
+     * When the mouse moves ,is holding a button inside the panel, and we are in edit mode,
+     * we show a cursor position to the user to make it clearer where their selection is.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         if (!_is_editing) {
@@ -352,7 +437,11 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             renderException(ex);
         }
     }
-
+    /**
+     * When the mouse moves inside the panel, and we are in edit mode,
+     * we show a cursor position to the user to make it clearer where their selection is.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
         float sX = (e.getX() - offset_x) / scale_x;
@@ -362,7 +451,14 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
         _game.setCursorPos(cursor_pos);
         repaint();
     }
-
+    
+    /**
+     * This is the result of the animation timer.<br>
+     * We execute an empty input, which forces the game to go through every
+     * entities' iterate function.<br>
+     * This is used for animations such as with the pathfinding or ice.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         try {

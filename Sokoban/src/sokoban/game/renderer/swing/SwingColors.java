@@ -2,6 +2,13 @@ package sokoban.game.renderer.swing;
 
 import java.awt.*;
 
+/**
+ * Exists from a time when all game objects were simple
+ * rectangles on the screen. This goes unused in the final version
+ * where every entity/tile has its own image.<br>
+ * The exception is the BACKGROUND color that is still used to wipe the screen
+ * when no tile is available to be drawn.
+ */
 public class SwingColors {
     public static final Color WALL = new Color(63, 66, 77);
     public static final Color FLOOR = new Color(111, 120, 173);
