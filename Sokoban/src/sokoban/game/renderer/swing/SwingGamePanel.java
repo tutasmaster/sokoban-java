@@ -243,23 +243,33 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
 
         //GENERATE MOVE LIST
         int x = 0;
+        int y = 0;
         for(int i = _game.lastUndoStateLevel; i < _game.getUndoStateSize(); i++){
             try{
                 String s = _game.getMoveFromUndoState(i);
                 int newX = x*30 + 10;
+                if(newX > d.width - 40){
+                    x = 0;
+                    newX = 10;
+                    y++;
+                }
+                int newY = y*30+20;
+                
                 switch(s){
                     case "left":
-                        g.drawImage(_left_image, newX,20,20,20, null);
+                        g.drawImage(_left_image, newX,newY,20,20, null);
                         break;
                     case "up":
-                        g.drawImage(_up_image, newX,20,20,20 ,null);
+                        g.drawImage(_up_image, newX,newY,20,20 ,null);
                         break;
                     case "right":
-                        g.drawImage(_right_image, newX,20,20,20, null);
+                        g.drawImage(_right_image, newX,newY,20,20, null);
                         break;
                     case "down":
-                        g.drawImage(_down_image, newX,20,20,20, null);
+                        g.drawImage(_down_image, newX,newY,20,20, null);
                         break;
+                    default:
+                        g.drawImage(_player_image, newX,newY,20,20, null);
                 }
                 x+=1;
             }catch(Exception e){
@@ -302,6 +312,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
      */
     @Override
     public void keyPressed(KeyEvent e) {
+        if(_game.playback)
+            return;
         String s = "";
         if (e.getKeyChar() == 'w' || e.getKeyCode() == KeyEvent.VK_UP) {
             s = "up";
@@ -376,6 +388,8 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
      */
     @Override
     public void mousePressed(MouseEvent e) {
+        if(_game.playback)
+            return;
         float sX = (e.getX() - offset_x) / scale_x;
         float sY = (e.getY() - offset_y) / scale_y;
 

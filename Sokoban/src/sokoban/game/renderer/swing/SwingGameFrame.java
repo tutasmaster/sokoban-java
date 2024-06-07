@@ -254,6 +254,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     private void jLoadItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLoadItemActionPerformed
         // TODO add your handling code here:
+        if(_game.playback)
+            return;
         load();
     }//GEN-LAST:event_jLoadItemActionPerformed
 
@@ -268,6 +270,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     private void jSaveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSaveItemActionPerformed
         // TODO add your handling code here:
+        if(_game.playback)
+            return;
         save();
     }//GEN-LAST:event_jSaveItemActionPerformed
 
@@ -316,6 +320,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
     SwingEditFrame editFrame = null;
 
     private void jEditLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditLevelActionPerformed
+        if(_game.playback)
+            return;
         if(!canEdit())
             return;
         if (editFrame == null) {
@@ -339,6 +345,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     private void jLoadLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLoadLevelActionPerformed
         // TODO add your handling code here:
+        if(_game.playback)
+            return;
         if(!canEdit())
             return;
         JFileChooser fileChooser = new JFileChooser();
@@ -369,6 +377,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     private void jSaveLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSaveLevelActionPerformed
         // TODO add your handling code here:
+        if(_game.playback)
+            return;
         if(!canEdit())
             return;
         JFileChooser fileChooser = new JFileChooser();
@@ -404,6 +414,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
 
     private void jPlaybackItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPlaybackItemActionPerformed
         // TODO add your handling code here:
+        if(_game.playback)
+            return;
         _game.startForcedPlayback();
     }//GEN-LAST:event_jPlaybackItemActionPerformed
 
@@ -415,6 +427,8 @@ public class SwingGameFrame extends javax.swing.JFrame {
     }
 
     private void restart() {
+        if(_game.playback)
+            return;
         _game.start();
         jGamePanel.repaint();
     }

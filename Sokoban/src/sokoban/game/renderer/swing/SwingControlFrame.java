@@ -151,6 +151,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(_game.playback)
+            return;
         try {
             Game.INPUT_RESULT r = _game.input("up");
             _panel.handleInputResult(r);
@@ -160,6 +162,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(_game.playback)
+            return;
         try {
             Game.INPUT_RESULT r = _game.input("right");
             _panel.handleInputResult(r);
@@ -169,6 +173,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if(_game.playback)
+            return;
         try {
             Game.INPUT_RESULT r = _game.input("down");
             _panel.handleInputResult(r);
@@ -178,6 +184,8 @@ public class SwingControlFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if(_game.playback)
+            return;
         try {
             Game.INPUT_RESULT r = _game.input("left");
             _panel.handleInputResult(r);

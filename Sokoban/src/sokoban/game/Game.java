@@ -63,7 +63,7 @@ public class Game {
 	/**
 	 * Defines the maximum amount of undo states.
 	 */
-	public static final int MAXIMUM_UNDO = 50;
+	public static final int MAXIMUM_UNDO = 200;
 
 	/**
 	 * Defines the filetype for all savefiles.
@@ -418,6 +418,9 @@ public class Game {
 	private void invalidateStates(){
 		if(_undo_states.size() > MAXIMUM_UNDO){
 			_undo_states.remove(0);
+			lastUndoStateLevel--;
+			if(lastUndoStateLevel < 0)
+				lastUndoStateLevel = 0;
 		}
 		if(_redo_states.size() > MAXIMUM_UNDO){
 			_redo_states.remove(0);
@@ -704,14 +707,26 @@ public class Game {
 		}
 		_has_pushed = false;
         Vector2 playerPosition = getPlayer().getPosition();
-		saveState();
+		
+		
 		if (cursorPosition.getDistanceTo(playerPosition) < 1.05) {
+			if(cursorPosition.x - playerPosition.x == -1)
+				last_move = "left";
+			if(cursorPosition.x - playerPosition.x == 1)
+				last_move = "right";
+			if(cursorPosition.y - playerPosition.y == -1)
+				last_move = "up";
+			if(cursorPosition.y - playerPosition.y == 1)
+				last_move = "down";
+			saveState();
 			getPlayer().move(cursorPosition.x - playerPosition.x, cursorPosition.y - playerPosition.y);
 			if (_has_pushed)
 				return INPUT_RESULT.PUSHED;
-			else
+			else {
 				return INPUT_RESULT.NONE;
+			}
 		}
+		saveState();
 		Graph g = new Graph(this);
 		ArrayList<Vector2> path = g.getPath(getPlayer().getPosition(), cursorPosition);
 		getPlayer().setPath(path);
