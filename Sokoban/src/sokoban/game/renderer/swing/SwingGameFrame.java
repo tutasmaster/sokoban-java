@@ -60,6 +60,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
         jSaveItem = new javax.swing.JMenuItem();
         jLoadItem = new javax.swing.JMenuItem();
         jMouseMode = new javax.swing.JMenuItem();
+        jPlaybackItem = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jSaveLevel = new javax.swing.JMenuItem();
         jLoadLevel = new javax.swing.JMenuItem();
@@ -159,6 +160,18 @@ public class SwingGameFrame extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMouseMode);
+
+        jPlaybackItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
+        jPlaybackItem.setBackground(new java.awt.Color(51, 51, 51));
+        jPlaybackItem.setForeground(new java.awt.Color(255, 255, 255));
+        jPlaybackItem.setLabel("Playback");
+        jPlaybackItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPlaybackItemActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jPlaybackItem);
+        jPlaybackItem.getAccessibleContext().setAccessibleName("Playback");
 
         jMenuBar2.add(jMenu3);
 
@@ -389,6 +402,11 @@ public class SwingGameFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLoadItem2ActionPerformed
 
+    private void jPlaybackItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPlaybackItemActionPerformed
+        // TODO add your handling code here:
+        _game.startForcedPlayback();
+    }//GEN-LAST:event_jPlaybackItemActionPerformed
+
     public void closeEditBox() {
         editFrame = null;
         _game.setCursorPos(null);
@@ -413,6 +431,7 @@ public class SwingGameFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMouseMode;
+    private javax.swing.JMenuItem jPlaybackItem;
     private javax.swing.JMenuItem jRestartItem;
     private javax.swing.JMenuItem jSaveItem;
     private javax.swing.JMenuItem jSaveLevel;

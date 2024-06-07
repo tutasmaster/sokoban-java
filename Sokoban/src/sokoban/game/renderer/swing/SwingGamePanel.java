@@ -43,8 +43,13 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             _ice_image = _tilemap.getSubimage(80,0,16,16);
             _hole_image = _tilemap.getSubimage(80+16,0,16,16);
             _hole_close_image = _tilemap.getSubimage(80+32,0,16,16);
+            _down_image = ImageIO.read(Objects.requireNonNull(Map.class.getResource("assets/arrow1.png")));
+            _left_image = ImageIO.read(Objects.requireNonNull(Map.class.getResource("assets/arrow2.png")));
+            _up_image = ImageIO.read(Objects.requireNonNull(Map.class.getResource("assets/arrow3.png")));
+            _right_image = ImageIO.read(Objects.requireNonNull(Map.class.getResource("assets/arrow4.png")));
             _push_audio = loadSound("assets/push2.wav");
             _goal_audio = loadSound("assets/goal.wav");
+
         } catch (Exception e) {
             SwingRenderer.renderException(e);
         }
@@ -69,6 +74,10 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
     private BufferedImage _ice_image;
     private BufferedImage _hole_image;
     private BufferedImage _hole_close_image;
+    private BufferedImage _up_image;
+    private BufferedImage _down_image;
+    private BufferedImage _left_image;
+    private BufferedImage _right_image;
     private Clip _push_audio;
     private Clip _goal_audio;
     private float scale_x = 25;
@@ -188,6 +197,30 @@ public class SwingGamePanel extends JPanel implements KeyListener, MouseListener
             g.drawRect((int) (cursor.x * scale_x) + offset_x, (int) (cursor.y * scale_x) + offset_y, sX + 1, sY + 1);
         }
 
+        //GENERATE MOVE LIST
+        int x = 0;
+        for(int i = _game.lastUndoStateLevel; i < _game.getUndoStateSize(); i++){
+            try{
+                String s = _game.getMoveFromUndoState(i);
+                int newX = x*30 + 10;
+                switch(s){
+                    case "left":
+                        g.drawImage(_left_image, newX,20,20,20, null);
+                        break;
+                    case "up":
+                        g.drawImage(_up_image, newX,20,20,20 ,null);
+                        break;
+                    case "right":
+                        g.drawImage(_right_image, newX,20,20,20, null);
+                        break;
+                    case "down":
+                        g.drawImage(_down_image, newX,20,20,20, null);
+                        break;
+                }
+                x+=1;
+            }catch(Exception e){
+            }
+        }
         //g.setColor(Color.WHITE);
         //g.drawString("STEPS: ",0,d.height);
     }

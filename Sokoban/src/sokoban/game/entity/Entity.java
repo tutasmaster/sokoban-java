@@ -130,6 +130,7 @@ public class Entity implements Serializable {
         }
     }
     public boolean isPathing(){
+
         return !(path == null || path.isEmpty());
     }
     protected boolean moveInternal(int x, int y) {

@@ -12,6 +12,52 @@ import java.util.Stack;
 import static sokoban.game.Map.generateBoxMap;
 
 public class Game {
+	public String last_move = "";
+	public boolean playback = false;
+	public boolean isForcedPlayback = false;
+
+	public int lastUndoStateLevel = 0;
+	public int currentUndoState = 0;
+
+	public void startPlayback(){
+		playback = true;
+		isForcedPlayback = false;
+		currentUndoState = lastUndoStateLevel;
+
+	}
+
+	public void startForcedPlayback(){
+		playback = true;
+		isForcedPlayback = true;
+		currentUndoState = lastUndoStateLevel;
+
+	}
+
+	public String getMoveFromUndoState(byte[] state) throws Exception{
+
+		ByteArrayInputStream input = new ByteArrayInputStream(state);
+		ObjectInputStream stream = new ObjectInputStream(input);
+		Map m = (Map) stream.readObject();
+		List<Entity> e = (List<Entity>) stream.readObject();
+		String r = (String) stream.readObject();
+		stream.close();
+		return r;
+	}
+	public String getMoveFromUndoState(int pos) throws Exception{
+		return getMoveFromUndoState(_undo_states.elementAt(pos));
+	}
+
+	public void loadUndo(int pos)throws Exception {
+		byte[] state = _undo_states.elementAt(pos);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(state);
+		load(inputStream);
+		inputStream.close();
+		_redo_states.push(state);
+	}
+
+	public int getUndoStateSize(){
+		return _undo_states.size();
+	}
 	public static final int MAXIMUM_UNDO = 50;
 	public static final String SAVE_TYPE = ".sok";
 	public final String[] levels = {"level01.sokl", "level02.sokl", "wacky.sokl", "suspect.sokl", "lost.sokl"};
@@ -82,6 +128,26 @@ public class Game {
 		if(!isRunning()){
 			return INPUT_RESULT.NONE;
 		}
+
+		if(playback){
+
+			if(currentUndoState < _undo_states.size()){
+				loadUndo(currentUndoState);
+				currentUndoState++;
+			}else{
+				playback = false;
+				if(!isForcedPlayback) {
+					if (loadNextLevel()) {
+						return INPUT_RESULT.NEXT_LEVEL;
+					} else {
+						setRunning(false);
+						return INPUT_RESULT.END;
+					}
+				}
+			}
+			return INPUT_RESULT.NONE;
+		}
+
 		for (Entity entity : _entity_list) {
 			entity.iterate();
 		}
@@ -95,12 +161,8 @@ public class Game {
 		}
 
 		if (goalsLeft() == 0) {
-			if (loadNextLevel()) {
-				return INPUT_RESULT.NEXT_LEVEL;
-			} else {
-				setRunning(false);
-				return INPUT_RESULT.END;
-			}
+			saveState();
+			startPlayback();
 		} else if (hasPushed) {
 			return INPUT_RESULT.PUSHED;
 		}
@@ -131,6 +193,7 @@ public class Game {
 	}
 	
 	public INPUT_RESULT input(String input) throws Exception {
+		last_move = input;
 		hasPushed = false;
 		String i = input.toLowerCase();
 		switch (i) {
@@ -286,6 +349,7 @@ public class Game {
 		
 		stream.writeObject(_map);
 		stream.writeObject(_entity_list);
+		stream.writeObject(last_move);
 		stream.close();
 	}
 	
@@ -361,6 +425,7 @@ public class Game {
 		for (Entity entity : _entity_list) {
 			entity.setGame(this);
 		}
+		last_move = (String) stream.readObject();
 		stream.close();
 	}
 	
@@ -406,7 +471,7 @@ public class Game {
 			return false;
 		if (currentLevel >= levels.length - 1)
 			return false;
-		
+		lastUndoStateLevel = _undo_states.size();
 		currentLevel++;
 		loadLocalLevel(levels[currentLevel]);
 		return true;
