@@ -1,6 +1,6 @@
 # Sokoban
 
-Made for OOP class in Licenciatura de Engenharia Informática circa 2023.
+Made for OOP class in Licenciatura de Engenharia Informática 2023.
 
 ## Features
 - Clean code-base
